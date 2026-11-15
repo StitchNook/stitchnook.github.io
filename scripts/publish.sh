@@ -5,7 +5,7 @@
 #
 #   sh scripts/publish.sh ["message"]
 #
-# One-time setup: remote `public` = git@github-stitchnook:StitchNook/stitchnook.git
+# One-time setup: remote `public` = git@github-stitchnook:StitchNook/stitchnook.github.io.git
 # (SSH host alias using the StitchNook key, see ~/.ssh/config).
 set -eu
 

@@ -6,11 +6,11 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 /** Final address of the site (no trailing slash). Also used in index.html, sitemap.xml, robots.txt. */
-const SITE = 'https://stitchnook.github.io/stitchnook'
+const SITE = 'https://stitchnook.github.io'
 /** Ko-fi page (same value as src/lib/support.ts). */
 const KOFI = 'https://ko-fi.com/stitchnook'
 /** Public contact address (legal notice). */
-const CONTACT = 'https://github.com/StitchNook/stitchnook/issues'
+const CONTACT = 'https://github.com/StitchNook/stitchnook.github.io/issues'
 
 const LANGS = ['fr', 'en', 'es', 'de']
 const NAMES = { fr: 'Français', en: 'English', es: 'Español', de: 'Deutsch' }
