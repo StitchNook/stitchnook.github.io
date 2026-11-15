@@ -1,0 +1,70 @@
+{
+  "name": "stitchnook",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "electron": "vite build && electron .",
+    "electron:dev": "VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "dist:win": "tsc -b && vite build && electron-builder --win --x64",
+    "dist:mac": "tsc -b && vite build && electron-builder --mac --arm64"
+  },
+  "dependencies": {
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0",
+    "oxlint": "^1.88.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4"
+  },
+  "description": "Stitchnook — free cross-stitch pattern editor",
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "app.stitchnook.desktop",
+    "productName": "Stitchnook",
+    "icon": "build/icon.png",
+    "files": [
+      "dist/**",
+      "electron/**",
+      "!node_modules/**"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "portable",
+        "zip"
+      ],
+      "signAndEditExecutable": true,
+      "artifactName": "Stitchnook-${version}-win-x64.${ext}"
+    },
+    "portable": {
+      "artifactName": "Stitchnook-${version}-portable.exe"
+    },
+    "mac": {
+      "target": [
+        "dir"
+      ],
+      "category": "public.app-category.graphics-design",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    }
+  },
+  "license": "AGPL-3.0-or-later"
+}

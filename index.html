@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stitchnook — free cross-stitch pattern maker</title>
+    <meta
+      name="description"
+      content="Free cross-stitch pattern maker in your browser: draw charts, turn photos and PDFs into patterns, full DMC thread catalogue, progress tracking, print or save as PDF. No account, no subscription."
+    />
+    <link rel="canonical" href="https://stitchnook.github.io/stitchnook/" />
+    <link rel="alternate" hreflang="fr" href="https://stitchnook.github.io/stitchnook/fr/" />
+    <link rel="alternate" hreflang="en" href="https://stitchnook.github.io/stitchnook/en/" />
+    <link rel="alternate" hreflang="es" href="https://stitchnook.github.io/stitchnook/es/" />
+    <link rel="alternate" hreflang="de" href="https://stitchnook.github.io/stitchnook/de/" />
+    <link rel="alternate" hreflang="x-default" href="https://stitchnook.github.io/stitchnook/" />
+
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="apple-touch-icon" href="./icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <meta name="theme-color" content="#0f172a" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Stitchnook" />
+    <meta property="og:title" content="Stitchnook — free cross-stitch pattern maker" />
+    <meta
+      property="og:description"
+      content="Design cross-stitch charts, convert photos, full DMC catalogue, print to PDF. Free, no account."
+    />
+    <meta property="og:url" content="https://stitchnook.github.io/stitchnook/" />
+    <meta property="og:image" content="https://stitchnook.github.io/stitchnook/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Stitchnook",
+        "url": "https://stitchnook.github.io/stitchnook/",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Any (web browser)",
+        "inLanguage": ["en", "fr", "es", "de"],
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+        "description": "Free cross-stitch pattern maker: draw charts, convert photos and PDFs, full DMC catalogue, progress tracking, print to PDF."
+      }
+    </script>
+
+    <script>
+      // Apply the saved theme before the first paint (see src/hooks/useTheme.ts).
+      try {
+        var saved = localStorage.getItem('stitchly.theme.v1')
+        var dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+      } catch (e) {
+        document.documentElement.dataset.theme = 'dark'
+      }
+      // Offline support and installation (web only: the desktop app has its own files).
+      if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function () {})
+        })
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <h1>Stitchnook — free cross-stitch pattern maker</h1>
+      <p>
+        Draw cross-stitch charts, turn photos and PDFs into patterns, pick threads from the full DMC catalogue, track
+        your progress and print your pattern or save it as PDF. Free, no account, everything stays in your browser.
+        JavaScript is required to run the editor.
+      </p>
+      <p><a href="./en/">About Stitchnook</a> · <a href="./fr/">Français</a> · <a href="./es/">Español</a> · <a href="./de/">Deutsch</a></p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

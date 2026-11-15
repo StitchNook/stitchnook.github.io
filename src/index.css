@@ -1,0 +1,233 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-panel: oklch(0.21 0.015 265);
+  --color-panel-soft: oklch(0.26 0.015 265);
+  --color-panel-line: oklch(0.33 0.015 265);
+  /* Darkest chrome (tab strip). */
+  --color-chrome: oklch(0.18 0.015 265);
+  --color-body-text: oklch(0.93 0.01 265);
+}
+
+/*
+ * Light theme. The interface was designed dark: surfaces use the panel tokens
+ * and text uses Tailwind's slate scale (light shades for text). Flipping the
+ * slate scale, and the pale accent shades used as text, turns that into a
+ * readable light theme without rewriting every component.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-panel: oklch(0.985 0.003 265);
+  --color-panel-soft: oklch(0.955 0.006 265);
+  --color-panel-line: oklch(0.87 0.01 265);
+  --color-chrome: oklch(0.93 0.008 265);
+  --color-body-text: oklch(0.25 0.03 265);
+
+  --color-slate-50: oklch(12.9% 0.042 264.695);
+  --color-slate-100: oklch(20.8% 0.042 265.755);
+  --color-slate-200: oklch(27.9% 0.041 260.031);
+  --color-slate-300: oklch(37.2% 0.044 257.287);
+  --color-slate-400: oklch(44.6% 0.043 257.281);
+  --color-slate-500: oklch(52% 0.046 257.417);
+  --color-slate-600: oklch(70.4% 0.04 256.788);
+  --color-slate-700: oklch(86.9% 0.022 252.894);
+  --color-slate-800: oklch(92.9% 0.013 255.508);
+  --color-slate-900: oklch(96.8% 0.007 247.896);
+  --color-slate-950: oklch(98.4% 0.003 247.858);
+
+  --color-sky-200: oklch(44.3% 0.11 240.79);
+  --color-sky-300: oklch(50% 0.134 242.749);
+  --color-sky-400: oklch(58.8% 0.158 241.966);
+  --color-amber-200: oklch(47.3% 0.137 46.201);
+  --color-amber-300: oklch(55.5% 0.163 48.998);
+  --color-amber-400: oklch(55.5% 0.163 48.998);
+  --color-rose-200: oklch(45.5% 0.188 13.697);
+  --color-rose-300: oklch(51.4% 0.222 16.935);
+  --color-rose-400: oklch(58.6% 0.253 17.585);
+  --color-emerald-400: oklch(59.6% 0.145 163.225);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overscroll-behavior: none;
+  background: var(--color-panel);
+  color: var(--color-body-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin scrollbars for the side panels. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-panel-line) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-panel-line);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/*
+ * Native controls. A strong blue accent (the buttons' sky-600) makes the
+ * browser draw white check marks; a pale one got black marks. Sliders are
+ * drawn by hand so their track follows the theme instead of the browser's
+ * own (dark) style. RangeField sets --fill to show the filled part.
+ */
+:root {
+  --color-accent: #0284c7;
+  accent-color: var(--color-accent);
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--color-accent);
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) var(--fill, 0%),
+    var(--color-panel-line) var(--fill, 0%)
+  );
+}
+input[type='range']::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-panel-line);
+}
+input[type='range']::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid var(--color-panel);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+input[type='range']::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid var(--color-panel);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+input[type='range']:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------- printing */
+/* On screen, show the 10mm sheet margins that @page adds when printing. */
+@media screen {
+  .print-page {
+    box-sizing: content-box;
+    padding: 10mm;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  /* Chart sheets switch to landscape when that gives bigger stitches. */
+  @page chart-landscape {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  html,
+  body,
+  #root {
+    height: auto;
+    background: #fff;
+    color: #000;
+  }
+
+  /* Everything that is pure editor chrome disappears. */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Only the print overlay is printed: the whole editor goes, including the
+     empty drawing area that used to fill a blank first sheet. */
+  .app-root {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .app-root > :not(.print-shell) {
+    display: none !important;
+  }
+
+  /* The print overlay stops being an overlay and becomes the document flow. */
+  .print-shell {
+    position: static !important;
+    inset: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    padding: 0 !important;
+    z-index: auto !important;
+  }
+
+  /* :not(.no-print), or this more specific rule would bring the settings
+     bar back onto the first sheet. */
+  .print-shell > div:not(.no-print) {
+    display: block !important;
+    max-width: none !important;
+    gap: 0 !important;
+  }
+
+  .print-page {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  /* Force the browser to keep swatch colours instead of dropping backgrounds. */
+  .print-shell,
+  .print-shell * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

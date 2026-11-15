@@ -1,0 +1,14 @@
+{
+  "name": "Stitchnook",
+  "short_name": "Stitchnook",
+  "description": "Free cross-stitch pattern maker: draw charts, convert photos, full DMC catalogue, print to PDF.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    { "src": "icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
