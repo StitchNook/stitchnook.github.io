@@ -1,0 +1,69 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+body{background:#0f172a;font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;display:flex;color:#e2e8f0}
+.left{width:560px;padding:72px 0 0 72px;box-sizing:border-box;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:18px;font-size:44px;font-weight:700;letter-spacing:-.5px;color:#fff}
+.brand img{width:72px;height:72px}
+h1{font-size:56px;line-height:1.08;margin:48px 0 22px;font-weight:800;letter-spacing:-1.5px;color:#fff}
+h1 span{color:#fb7185}
+p{font-size:24px;line-height:1.45;margin:0;color:#94a3b8}
+.tags{margin-top:auto;margin-bottom:64px;display:flex;gap:10px;flex-wrap:wrap;max-width:440px}
+.tags b{white-space:nowrap;font-weight:600;font-size:18px;padding:8px 14px;border-radius:999px;background:#1e293b;color:#cbd5e1}
+canvas{margin:40px 0 0 28px;border-radius:28px;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+</style></head><body>
+<div class="left">
+  <div class="brand"><img src="../../public/icon.svg">Stitchnook</div>
+  <h1>Free cross-stitch<br><span>pattern maker</span></h1>
+  <p>Draw charts, turn photos into patterns,<br>print to PDF — in your browser.</p>
+  <div class="tags"><b>100% free</b><b>No account</b><b>DMC catalog</b><b>EN · FR · ES · DE</b></div>
+</div>
+<canvas id="c" width="560" height="550"></canvas>
+<script>
+const P = [
+"BBBBBBBBBBBBBBBBBBBBBB",
+"B....................B",
+"B.Y.Y............Y.Y.B",
+"B..y..............y..B",
+"B.Y.Y............Y.Y.B",
+"B.....RRRR..RRRR.....B",
+"B....RrrrrRRrrrrR....B",
+"B...RrwwrrrrrrrrrR...B",
+"B...RrwrrrrrrrrrrR...B",
+"B...RrrrrrrrrrrrrR...B",
+"B...RrrrrrrrrrrrrR...B",
+"B....RrrrrrrrrrrR....B",
+"B.....RrrrrrrrrR.....B",
+"B......RrrrrrrR......B",
+"B.......RrrrrR.......B",
+"B........RrrR........B",
+"B.Y.Y.....RR.....Y.Y.B",
+"B..y..............y..B",
+"B.Y.Y............Y.Y.B",
+"B....................B",
+"BBBBBBBBBBBBBBBBBBBBBB",
+];
+const C = {R:'#be123c',r:'#f43f5e',P:'#7c3aed',p:'#a78bfa',G:'#15803d',L:'#4ade80',Y:'#7c3aed',y:'#fbbf24',w:'#fda4af',B:'#0284c7'};
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height, s = 24, cols = 22, rows = 21;
+const ox = (W - cols*s)/2, oy = (H - rows*s)/2;
+x.fillStyle = '#f5eedf'; x.fillRect(0,0,W,H);
+// fabric holes
+x.fillStyle = '#d9ccb3';
+for (let i=0;i<=W/s+1;i++) for (let j=0;j<=H/s+1;j++){ x.beginPath(); x.arc(ox%s + i*s, oy%s + j*s, 1.8, 0, 7); x.fill(); }
+// grid lines every 10
+x.strokeStyle='rgba(120,100,70,.18)'; x.lineWidth=1;
+for (let i=0;i<=cols;i++){x.beginPath();x.moveTo(ox+i*s,oy);x.lineTo(ox+i*s,oy+rows*s);x.stroke()}
+for (let j=0;j<=rows;j++){x.beginPath();x.moveTo(ox,oy+j*s);x.lineTo(ox+cols*s,oy+j*s);x.stroke()}
+x.lineCap='round';
+P.forEach((row,j)=>[...row].forEach((ch,i)=>{
+  const col=C[ch]; if(!col) return;
+  const a=ox+i*s+4, b=oy+j*s+4, e=s-8;
+  x.lineWidth=6.5; x.strokeStyle='rgba(0,0,0,.18)';
+  x.beginPath();x.moveTo(a+1,b+e+1);x.lineTo(a+e+1,b+1);x.stroke();
+  x.strokeStyle=col;
+  x.beginPath();x.moveTo(a,b+e);x.lineTo(a+e,b);x.stroke();
+  x.beginPath();x.moveTo(a,b);x.lineTo(a+e,b+e);x.stroke();
+  x.lineWidth=2; x.strokeStyle='rgba(255,255,255,.25)';
+  x.beginPath();x.moveTo(a+2,b+1);x.lineTo(a+e-3,b+e-4);x.stroke();
+}));
+</script></body></html>
