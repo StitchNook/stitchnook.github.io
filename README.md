@@ -3,7 +3,7 @@
 Free cross-stitch pattern maker that runs in your browser — **no account, no subscription, no locked features**.
 Available in English, French, Spanish and German (follows the system language).
 
-Everything stays on your device: projects are saved in the browser (`localStorage`) and in the backup / project
+Everything stays on your device: projects are saved in the browser (IndexedDB) and in the backup / project
 files you export. The site works offline once installed (PWA).
 
 If it helps you, you can support it on [Ko-fi](https://ko-fi.com/stitchnook).

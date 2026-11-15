@@ -79,14 +79,18 @@ export const t = messages(
       deselect: 'Désélectionner',
       exportProject: 'Exporter le projet en .json',
       print: 'Imprimer / PDF',
-      clear: 'Effacer la sélection',
+      clear: 'Effacer la sélection (ou Retour arrière)',
       applyPreview: 'Valider l’aperçu (collage, texte, transformation)',
       cancelPreview: 'Annuler l’aperçu / désélectionner / fermer',
       moveSelection: 'Déplacer la sélection ou l’aperçu (Maj : 10 points)',
       brushKeys: 'Réduire / agrandir le pinceau (les deux touches à droite de P)',
       brushWheel: 'Changer la taille du pinceau',
       zoom: 'Zoomer / dézoomer (aussi + et − du pavé numérique)',
-      hand: 'Main : déplacer la vue en glissant',
+      hand: 'Main : déplacer la vue en glissant (ou glisser avec le clic droit ou du milieu)',
+      wheelZoom: 'Zoomer sous le curseur (ou pincer sur le trackpad)',
+      wheelSideways: 'Faire défiler la vue horizontalement',
+      redoAlt: 'Rétablir (autre raccourci)',
+      shapeErase: 'Ligne, rectangle, cercle : gommer la forme tracée',
       help: 'Ouvrir l’aide (ou ?)',
       overlay: 'Afficher / masquer le calque de référence',
       panels: 'Masquer / afficher les panneaux latéraux (dessin plein écran)',
@@ -127,7 +131,8 @@ export const t = messages(
                 <b>Illustration</b> pour les dessins et aplats (contours nets, chaque point prend la
                 couleur majoritaire de sa zone) ou <b>Photo</b> pour les dégradés. <b>Recadrer</b>{' '}
                 enlève par exemple les boutons d’une capture d’écran ; « Simplifier les petites zones »
-                efface les points isolés ; le fond n’est retiré que depuis les bords.
+                fond les petites taches dans la couleur voisine ; par défaut, le fond n’est retiré que
+                depuis les bords (« Retirer aussi le fond à l’intérieur du motif » pour tout enlever).
               </li>
               <li>Chaque nouveau projet s’ouvre dans son propre onglet.</li>
             </UL>
@@ -145,15 +150,18 @@ export const t = messages(
             <H>4. Où trouver quoi</H>
             <UL>
               <li>
-                <b>En haut</b> : le menu Fichier, le nom du projet, l’impression, le thème et l’aide.
+                <b>En haut</b> : le menu Fichier, le nom du projet et la roue de ses paramètres (taille de
+                la grille, toile), « Imprimer / PDF », le thème (clair, sombre ou auto), la langue (FR, EN,
+                ES, DE ; la page se recharge sans rien perdre), « Aide » et « Soutenir » (Ko-fi).
               </li>
               <li>
                 <b>Barre de la planche</b> (sous les onglets) : annuler, zoom, affichage, grille, planches
                 d’impression et <b>Calque</b> de référence (l’œil l’affiche ou le masque).
               </li>
               <li>
-                <b>Barre d’état</b> (tout en bas) : position du curseur, taille, et les raccourcis pour se
-                déplacer dans la grille.
+                <b>Barre d’état</b> (tout en bas) : position du curseur, taille de la grille, taille finie et
+                toile, points posés et brodés, nombre de fils, raccourcis pour se déplacer, état de
+                l’enregistrement et, au besoin, un rappel de sauvegarde.
               </li>
               <li>
                 <b>Barre de l’outil</b> : les réglages simples de l’outil actif (taille, forme…).
@@ -176,10 +184,14 @@ export const t = messages(
             </UL>
             <H>5. Se déplacer</H>
             {viewHints}
+            <P>
+              Glisser avec le clic droit ou le bouton du milieu déplace aussi la vue ;{' '}
+              <Kbd k="shift" /> + molette la fait défiler horizontalement ; pincer sur le trackpad zoome.
+            </P>
             <H>6. Annuler</H>
             <P>
               <Kbd k="mod" /> + <Kbd k="Z" /> annule, <Kbd k="mod" /> + <Kbd k="shift" /> + <Kbd k="Z" />{' '}
-              rétablit. Chaque onglet garde son propre historique.
+              (ou <Kbd k="mod" /> + <Kbd k="Y" />) rétablit. Chaque onglet garde son propre historique.
             </P>
           </>
         ),
@@ -205,6 +217,7 @@ export const t = messages(
                 <Kbd k="mod" /> + <Kbd k="A" /> tout sélectionner, <Kbd k="mod" /> + <Kbd k="D" /> ou{' '}
                 <Kbd k="Échap" /> désélectionner.
               </li>
+              <li>Suppr ou Retour arrière efface les points sélectionnés.</li>
             </UL>
             <H>L’aperçu : rien n’est écrit avant de valider</H>
             <P>
@@ -356,7 +369,10 @@ export const t = messages(
                 Mode <b>Auto</b> : partir d’un point déjà validé le dévalide, sinon on valide. Modes{' '}
                 <b>Valider</b> / <b>Dévalider</b> pour forcer ; <Kbd k="alt" /> inverse.
               </li>
-              <li>Le panneau Suivi montre l’avancement global et par couleur, avec « Tout » / « Annuler ».</li>
+              <li>
+                Le panneau Suivi montre l’avancement global et par couleur ; chaque couleur a son bouton
+                « Tout » (« Annuler » une fois terminée), et ↻ « Tout remettre à zéro » efface tout le suivi.
+              </li>
               <li>Un tracé de marquage s’annule en une fois.</li>
             </UL>
           </>
@@ -374,7 +390,7 @@ export const t = messages(
                 les plus gros possible.
               </li>
               <li>
-                Bouton <b>Planches</b> dans la barre de vue : voir et régler les découpes directement sur
+                Bouton <b>Planches</b> dans la barre de la planche : voir et régler les découpes directement sur
                 la grille.
               </li>
               <li>
@@ -385,6 +401,10 @@ export const t = messages(
               <li>
                 La <b>légende</b> liste les fils, le nombre de points, la longueur de fil estimée et le
                 plan d’assemblage.
+              </li>
+              <li>
+                Options : rendu « Couleur » ou « N & B », « Symboles », « Lignes centrales », « Légende
+                des fils » et « Marquer les points brodés ».
               </li>
               <li>
                 Pour un PDF : « Imprimer / PDF » puis « Enregistrer au format PDF ». Décochez{' '}
@@ -430,7 +450,8 @@ export const t = messages(
               <li>
                 <b>+ Dossier</b>, et <b>+ Motif ▾</b> : vierge, depuis une image, une grille PDF ou un fichier
                 .json, rangé dans le dossier affiché.
-                Double-clic sur un nom pour le renommer ; menu ⋯ pour le reste.
+                Double-clic sur un nom pour le renommer ; menu ⋯ pour le reste (dont « Transformer en
+                projet », qui en refait un projet).
               </li>
               <li>
                 <b>Glisser-déposer</b> un motif ou un dossier sur un dossier de l’arbre pour l’y ranger.
@@ -449,8 +470,8 @@ export const t = messages(
             <H>Créer un motif</H>
             <UL>
               <li>
-                Sélectionnez des points puis « Enregistrer comme motif » (panneau Sélection ou outil
-                Motifs) : un nom et un dossier choisi dans l’arbre (ou créé sur place).
+                Sélectionnez des points puis « Enregistrer comme motif » (panneau Sélection) ou
+                « Enregistrer la sélection comme motif » (outil Motifs) : un nom et un dossier choisi dans l’arbre (ou créé sur place).
               </li>
               <li>
                 Fichier → « Nouveau motif… » ou « + Motif ▾ » du gestionnaire : la fenêtre Créer, avec les
@@ -485,7 +506,7 @@ export const t = messages(
               <li>
                 <b>Menu Fichier</b> : <b>Créer</b> (raccourcis vers la fenêtre Créer : nouveau projet,
                 nouveau motif, depuis une image, depuis une grille PDF) · <b>Mes fichiers</b> (Mes projets,
-                Bibliothèque de motifs) · <b>Sauvegarde</b> (exporter ou ouvrir un projet, tout sauvegarder,
+                Bibliothèque de motifs) · <b>Sauvegarde (.json)</b> (exporter ou ouvrir un projet, tout sauvegarder,
                 restaurer).
               </li>
               <li>
@@ -501,19 +522,18 @@ export const t = messages(
       },
       storage: {
         title: 'Où sont mes données ?',
-        keywords: 'stockage sauvegarde données localstorage navigateur perdu disparu export backup plein',
+        keywords: 'stockage sauvegarde données localstorage indexeddb navigateur perdu disparu export backup plein rappel hors ligne installer',
         body: (): ReactNode => (
           <>
             <UL>
               <li>
                 Les projets sont <b>enregistrés automatiquement</b> dans le stockage local du navigateur,
                 au plus tard 10 secondes après une modification (même si vous continuez à dessiner), et
-                immédiatement avant de changer d’onglet, de passer à une autre fenêtre ou de fermer la
-                page.
+                immédiatement avant de changer d’onglet, de réduire la fenêtre ou de fermer la page.
               </li>
               <li>
                 Ce stockage est propre à <b>ce navigateur, ce profil et cette adresse</b> (par exemple{' '}
-                <code>localhost:5173</code>). Un autre navigateur, un autre profil Chrome ou une autre
+                <code>stitchnook.github.io</code>). Un autre navigateur, un autre profil Chrome ou une autre
                 adresse ne voient pas les mêmes projets. L’application de bureau a son propre stockage.
               </li>
               <li>
@@ -521,7 +541,7 @@ export const t = messages(
                 l’outil Texte.
               </li>
               <li>
-                <b>Tout sauvegarder</b> (Fichier → Sauvegarde) : tous les projets, motifs et dossiers dans un
+                <b>Tout sauvegarder</b> (menu Fichier, « Sauvegarde (.json) ») : tous les projets, motifs et dossiers dans un
                 seul fichier .json. Pour changer d’ordinateur ou de navigateur, ouvrez-le ailleurs avec{' '}
                 <b>Restaurer une sauvegarde…</b> : ce qui manque est ajouté, rien n’est écrasé (sauf si vous
                 choisissez de remplacer les versions plus anciennes), et les projets ouverts ne sont jamais
@@ -529,14 +549,25 @@ export const t = messages(
               </li>
               <li>
                 Un seul projet : <b>Exporter ce projet</b> (<Kbd k="mod" /> + <Kbd k="S" />) puis « Ouvrir un
-                projet exporté… ». Un motif exporté garde son dossier.
+                projet exporté… ». Un motif exporté se réimporte avec le type « Motif de bibliothèque » (ou
+                depuis le gestionnaire de motifs) ; importé sans choisir de dossier, il retrouve le sien.
+              </li>
+              <li>
+                <b>Rappel de sauvegarde</b> : si des projets ont changé et qu’aucune sauvegarde complète
+                n’a été faite depuis plus de 14 jours, la barre d’état propose « Sauvegarder » (télécharge
+                une sauvegarde complète) ou « Plus tard » (masque le rappel 7 jours).
+              </li>
+              <li>
+                <b>Hors ligne</b> : une fois le site chargé, l’application fonctionne sans connexion et peut
+                être installée depuis le navigateur. Seules les polices Google pas encore utilisées
+                demandent une connexion.
               </li>
               <li>
                 Vider les données du site dans le navigateur efface les projets : sauvegardez d’abord.
               </li>
               <li>
-                Si le stockage est plein (environ 5 Mo), un message l’indique : exportez puis supprimez
-                d’anciens projets.
+                La place disponible est large (une part du disque) ; si elle venait à manquer, un message
+                l’indique : sauvegardez puis supprimez d’anciens projets.
               </li>
             </UL>
           </>
@@ -629,14 +660,18 @@ export const t = messages(
         deselect: 'Deselect',
         exportProject: 'Export the project as .json',
         print: 'Print / PDF',
-        clear: 'Clear the selection',
+        clear: 'Clear the selection (or Backspace)',
         applyPreview: 'Apply the preview (paste, text, transform)',
         cancelPreview: 'Cancel the preview / deselect / close',
         moveSelection: 'Move the selection or preview (Shift: 10 stitches)',
         brushKeys: 'Smaller / bigger brush (the two keys right of P)',
         brushWheel: 'Change the brush size',
         zoom: 'Zoom in / out (also + and − on the keypad)',
-        hand: 'Hand: drag to pan the view',
+        hand: 'Hand: drag to pan the view (or drag with the right or middle button)',
+        wheelZoom: 'Zoom under the cursor (or pinch on the trackpad)',
+        wheelSideways: 'Scroll the view horizontally',
+        redoAlt: 'Redo (alternative shortcut)',
+        shapeErase: 'Line, rectangle, circle: erase the drawn shape',
         help: 'Open help (or ?)',
         overlay: 'Show / hide the reference image',
         panels: 'Hide / show the side panels (full-screen drawing)',
@@ -669,14 +704,16 @@ export const t = messages(
                   <b>Blank</b>: an empty chart (size in stitches, fabric, stitches per inch or per cm).
                 </li>
                 <li>
-                  <b>A PDF chart</b> exported by another app, or <b>an exported .json file</b>.
+                  <b>A PDF chart</b> exported by another app, or <b>A .json file</b> (an exported project or
+                  motif).
                 </li>
                 <li>
                   <b>An image</b>: turns a photo or drawing into cross stitches. <b>Illustration</b> style
                   for drawings and flat colors (crisp outlines, each stitch takes the main color of its
                   area) or <b>Photo</b> for gradients. <b>Crop</b> removes, for instance, the buttons of a
-                  screenshot; “Simplify small areas” erases isolated stitches; the background is only
-                  removed from the edges.
+                  screenshot; “Simplify small areas” merges small specks into the neighboring color; by
+                  default, the background is only removed from the edges (“Also remove the background
+                  inside the motif” to remove it everywhere).
                 </li>
                 <li>Each new project opens in its own tab.</li>
               </UL>
@@ -693,15 +730,18 @@ export const t = messages(
               <H>4. Where to find what</H>
               <UL>
                 <li>
-                  <b>Top</b>: the File menu, the project name, printing, the theme and help.
+                  <b>Top</b>: the File menu, the project name and its settings cog (chart size, fabric),
+                  “Print / PDF”, the theme (light, dark or auto), the language (FR, EN, ES, DE; the page
+                  reloads without losing anything), “Help” and “Support” (Ko-fi).
                 </li>
                 <li>
                   <b>Chart bar</b> (below the tabs): undo, zoom, display, grid, print sheets and the{' '}
                   <b>reference image</b> (the eye shows or hides it).
                 </li>
                 <li>
-                  <b>Status bar</b> (at the very bottom): cursor position, size, and the shortcuts for
-                  moving around the chart.
+                  <b>Status bar</b> (at the very bottom): cursor position, chart size, finished size and
+                  fabric, stitches placed and stitched, thread count, shortcuts for moving around, save
+                  status and, when needed, a backup reminder.
                 </li>
                 <li>
                   <b>Tool bar</b>: the simple settings of the active tool (size, shape…).
@@ -724,10 +764,14 @@ export const t = messages(
               </UL>
               <H>5. Moving around</H>
               {viewHints}
+              <P>
+                Dragging with the right or middle button pans too; <Kbd k="shift" /> + wheel scrolls
+                sideways; pinching on the trackpad zooms.
+              </P>
               <H>6. Undo</H>
               <P>
                 <Kbd k="mod" /> + <Kbd k="Z" /> undoes, <Kbd k="mod" /> + <Kbd k="shift" /> + <Kbd k="Z" />{' '}
-                redoes. Each tab keeps its own history.
+                (or <Kbd k="mod" /> + <Kbd k="Y" />) redoes. Each tab keeps its own history.
               </P>
             </>
           ),
@@ -753,6 +797,7 @@ export const t = messages(
                   <Kbd k="mod" /> + <Kbd k="A" /> selects all, <Kbd k="mod" /> + <Kbd k="D" /> or{' '}
                   <Kbd k="Échap" /> deselects.
                 </li>
+                <li>Delete or Backspace clears the selected stitches.</li>
               </UL>
               <H>The preview: nothing is written until you apply</H>
               <P>
@@ -846,7 +891,7 @@ export const t = messages(
                   <b>Reference</b> button in the chart bar (below the tabs). Drag and drop works too.
                 </li>
                 <li>
-                  Adjustable <b>opacity</b>; <b>Under the stitches</b> (your stitches cover the image) or{' '}
+                  Adjustable <b>opacity</b>; <b>Under stitches</b> (your stitches cover the image) or{' '}
                   <b>On top</b> (like tracing paper).
                 </li>
                 <li>
@@ -902,7 +947,10 @@ export const t = messages(
                   <b>Auto</b> mode: starting on a stitch already marked unmarks, otherwise it marks.{' '}
                   <b>Mark</b> / <b>Unmark</b> modes to force it; <Kbd k="alt" /> inverts.
                 </li>
-                <li>The Progress panel shows overall and per-color progress, with “All” / “Undo”.</li>
+                <li>
+                  The Progress panel shows overall and per-color progress; each color has its “All” button
+                  (“Undo” once complete), and ↻ “Reset everything” clears all progress.
+                </li>
                 <li>A marking stroke is undone in one go.</li>
               </UL>
             </>
@@ -920,7 +968,7 @@ export const t = messages(
                   stitches.
                 </li>
                 <li>
-                  <b>Sheets</b> button in the view bar: see and adjust the page splits right on the chart.
+                  <b>Sheets</b> button in the chart bar: see and adjust the page splits right on the chart.
                 </li>
                 <li>
                   Each sheet has <b>center arrows and lines</b>, numbers every 10 stitches on all 4 edges,
@@ -929,6 +977,10 @@ export const t = messages(
                 <li>
                   The <b>key</b> lists the threads, the stitch count, the estimated thread length and the
                   assembly plan.
+                </li>
+                <li>
+                  Options: “Color” or “B & W” rendering, “Symbols”, “Center lines”, “Thread legend” and
+                  “Mark stitched stitches”.
                 </li>
                 <li>
                   For a PDF: “Print / PDF”, then “Save as PDF”. Untick <b>“Headers and footers”</b> in
@@ -972,7 +1024,8 @@ export const t = messages(
                 </li>
                 <li>
                   <b>+ Folder</b>, and <b>+ Motif ▾</b>: blank, from an image, a PDF chart or a .json
-                  file, stored in the folder shown. Double-click a name to rename it; ⋯ menu for the rest.
+                  file, stored in the folder shown. Double-click a name to rename it; ⋯ menu for the rest (including
+                  “Turn into a project”, which makes it a project again).
                 </li>
                 <li>
                   <b>Drag and drop</b> a motif or folder onto a folder in the tree to file it there. Click
@@ -991,7 +1044,8 @@ export const t = messages(
               <H>Creating a motif</H>
               <UL>
                 <li>
-                  Select stitches, then “Save as motif” (Selection panel or Motifs tool): a name and a
+                  Select stitches, then “Save as motif” (Selection panel) or “Save selection as motif”
+                  (Motifs tool): a name and a
                   folder chosen in the tree (or created on the spot).
                 </li>
                 <li>
@@ -1027,7 +1081,7 @@ export const t = messages(
                 <li>
                   <b>File menu</b>: <b>Create</b> (shortcuts to the Create window: new project, new motif,
                   from an image, from a PDF chart) · <b>My files</b> (My projects, Motif library) ·{' '}
-                  <b>Backup</b> (export or open a project, back up everything, restore).
+                  <b>Backup (.json)</b> (export or open a project, back up everything, restore).
                 </li>
                 <li>
                   <b>PDF chart from another app</b>: File → “From a PDF chart…”. The app reads the cover
@@ -1041,18 +1095,18 @@ export const t = messages(
         },
         storage: {
           title: 'Where is my data?',
-          keywords: 'storage backup data localstorage browser lost missing gone export full',
+          keywords: 'storage backup data localstorage indexeddb browser lost missing gone export full reminder offline install',
           body: () => (
             <>
               <UL>
                 <li>
                   Projects are <b>saved automatically</b> in the browser’s local storage, at most 10
                   seconds after a change (even if you keep drawing), and immediately before you switch
-                  tabs, move to another window or close the page.
+                  tabs, minimize the window or close the page.
                 </li>
                 <li>
                   This storage belongs to <b>this browser, this profile and this address</b> (for example{' '}
-                  <code>localhost:5173</code>). Another browser, another Chrome profile or another address
+                  <code>stitchnook.github.io</code>). Another browser, another Chrome profile or another address
                   doesn’t see the same projects. The desktop app has its own storage.
                 </li>
                 <li>
@@ -1060,19 +1114,29 @@ export const t = messages(
                   tool.
                 </li>
                 <li>
-                  <b>Back up everything</b> (File → Backup): all projects, motifs and folders in a single
+                  <b>Back up everything</b> (File menu, “Backup (.json)”): all projects, motifs and folders in a single
                   .json file. To move to another computer or browser, open it there with{' '}
                   <b>Restore a backup…</b>: whatever is missing is added, nothing is overwritten (unless
                   you choose to replace older versions), and open projects are never touched.
                 </li>
                 <li>
                   A single project: <b>Export this project</b> (<Kbd k="mod" /> + <Kbd k="S" />), then
-                  “Open an exported project…”. An exported motif keeps its folder.
+                  “Open an exported project…”. An exported motif is re-imported with the “Library motif” type
+                  (or from the motif manager); imported without choosing a folder, it gets its own back.
+                </li>
+                <li>
+                  <b>Backup reminder</b>: if projects have changed and no full backup has been made in over
+                  14 days, the status bar offers “Back up” (downloads a full backup) or “Later” (hides the
+                  reminder for 7 days).
+                </li>
+                <li>
+                  <b>Offline</b>: once the site has loaded, the app works without a connection and can be
+                  installed from the browser. Only Google fonts not used yet need a connection.
                 </li>
                 <li>Clearing the site’s data in the browser erases the projects: back up first.</li>
                 <li>
-                  If the storage is full (about 5 MB), a message says so: export, then delete old
-                  projects.
+                  There is plenty of room (a share of the disk); if it ever runs out, a message says so:
+                  back up, then delete old projects.
                 </li>
               </UL>
             </>
@@ -1165,14 +1229,18 @@ export const t = messages(
         deselect: 'Deseleccionar',
         exportProject: 'Exportar el proyecto en .json',
         print: 'Imprimir / PDF',
-        clear: 'Borrar la selección',
+        clear: 'Borrar la selección (o Retroceso)',
         applyPreview: 'Aplicar la vista previa (pegado, texto, transformación)',
         cancelPreview: 'Cancelar la vista previa / deseleccionar / cerrar',
         moveSelection: 'Mover la selección o la vista previa (Mayús: 10 puntos)',
         brushKeys: 'Reducir / ampliar el pincel (las dos teclas a la derecha de la P)',
         brushWheel: 'Cambiar el tamaño del pincel',
         zoom: 'Acercar / alejar (también + y − del teclado numérico)',
-        hand: 'Mano: arrastrar para desplazar la vista',
+        hand: 'Mano: arrastrar para desplazar la vista (o arrastrar con el botón derecho o central)',
+        wheelZoom: 'Acercar bajo el cursor (o pellizcar en el trackpad)',
+        wheelSideways: 'Desplazar la vista en horizontal',
+        redoAlt: 'Rehacer (atajo alternativo)',
+        shapeErase: 'Línea, rectángulo, círculo: borrar la forma trazada',
         help: 'Abrir la ayuda (o ?)',
         overlay: 'Mostrar / ocultar la imagen de referencia',
         panels: 'Ocultar / mostrar los paneles laterales (dibujo a pantalla completa)',
@@ -1211,8 +1279,9 @@ export const t = messages(
                   <b>Una imagen</b>: convierte una foto o un dibujo en punto de cruz. Estilo{' '}
                   <b>Ilustración</b> para dibujos y colores planos (contornos nítidos, cada punto toma el
                   color mayoritario de su zona) o <b>Foto</b> para degradados. <b>Recortar</b> quita por
-                  ejemplo los botones de una captura de pantalla; «Simplificar zonas pequeñas» borra los
-                  puntos aislados; el fondo solo se quita desde los bordes.
+                  ejemplo los botones de una captura de pantalla; «Simplificar zonas pequeñas» funde las
+                  manchas pequeñas en el color vecino; por defecto, el fondo solo se quita desde los bordes
+                  («Quitar también el fondo dentro del motivo» para quitarlo todo).
                 </li>
                 <li>Cada proyecto nuevo se abre en su propia pestaña.</li>
               </UL>
@@ -1230,15 +1299,18 @@ export const t = messages(
               <H>4. Dónde está cada cosa</H>
               <UL>
                 <li>
-                  <b>Arriba</b>: el menú Archivo, el nombre del proyecto, la impresión, el tema y la ayuda.
+                  <b>Arriba</b>: el menú Archivo, el nombre del proyecto y la rueda de sus ajustes (tamaño
+                  del patrón, tela), «Imprimir / PDF», el tema (claro, oscuro o auto), el idioma (FR, EN,
+                  ES, DE; la página se recarga sin perder nada), «Ayuda» y «Apoyar» (Ko-fi).
                 </li>
                 <li>
                   <b>Barra del patrón</b> (bajo las pestañas): deshacer, zoom, visualización, cuadrícula,
                   hojas de impresión e <b>imagen de referencia</b> (el ojo la muestra u oculta).
                 </li>
                 <li>
-                  <b>Barra de estado</b> (abajo del todo): posición del cursor, tamaño y los atajos para
-                  moverse por el patrón.
+                  <b>Barra de estado</b> (abajo del todo): posición del cursor, tamaño del patrón, tamaño
+                  terminado y tela, puntos colocados y bordados, número de hilos, atajos para moverse,
+                  estado del guardado y, si hace falta, un recordatorio de copia de seguridad.
                 </li>
                 <li>
                   <b>Barra de la herramienta</b>: los ajustes sencillos de la herramienta activa (tamaño,
@@ -1264,10 +1336,14 @@ export const t = messages(
               </UL>
               <H>5. Desplazarse</H>
               {viewHints}
+              <P>
+                Arrastrar con el botón derecho o central también desplaza la vista;{' '}
+                <Kbd k="shift" /> + rueda la desplaza en horizontal; pellizcar en el trackpad hace zoom.
+              </P>
               <H>6. Deshacer</H>
               <P>
                 <Kbd k="mod" /> + <Kbd k="Z" /> deshace, <Kbd k="mod" /> + <Kbd k="shift" /> + <Kbd k="Z" />{' '}
-                rehace. Cada pestaña guarda su propio historial.
+                (o <Kbd k="mod" /> + <Kbd k="Y" />) rehace. Cada pestaña guarda su propio historial.
               </P>
             </>
           ),
@@ -1293,6 +1369,7 @@ export const t = messages(
                   <Kbd k="mod" /> + <Kbd k="A" /> selecciona todo, <Kbd k="mod" /> + <Kbd k="D" /> o{' '}
                   <Kbd k="Échap" /> deselecciona.
                 </li>
+                <li>Supr o Retroceso borra los puntos seleccionados.</li>
               </UL>
               <H>La vista previa: no se escribe nada hasta aplicar</H>
               <P>
@@ -1389,7 +1466,7 @@ export const t = messages(
                 </li>
                 <li>
                   <b>Opacidad</b> ajustable; <b>Bajo los puntos</b> (lo que has bordado cubre la imagen) o{' '}
-                  <b>Por encima</b> (como papel de calco).
+                  <b>Encima</b> (como papel de calco).
                 </li>
                 <li>
                   <b>Colocar</b>: arrastra la imagen para moverla, tira de una esquina para redimensionarla
@@ -1444,7 +1521,10 @@ export const t = messages(
                   Modo <b>Auto</b>: empezar sobre un punto ya marcado lo desmarca; si no, marca. Modos{' '}
                   <b>Marcar</b> / <b>Desmarcar</b> para forzarlo; <Kbd k="alt" /> invierte.
                 </li>
-                <li>El panel Progreso muestra el avance global y por color, con «Todo» / «Deshacer».</li>
+                <li>
+                  El panel Progreso muestra el avance global y por color; cada color tiene su botón «Todo»
+                  («Deshacer» una vez completo), y ↻ «Reiniciar todo» borra todo el progreso.
+                </li>
                 <li>Un trazo de marcado se deshace de una vez.</li>
               </UL>
             </>
@@ -1462,7 +1542,7 @@ export const t = messages(
                   lo más grandes posible.
                 </li>
                 <li>
-                  Botón <b>Hojas</b> en la barra de vista: ver y ajustar los cortes directamente sobre el
+                  Botón <b>Hojas</b> en la barra del patrón: ver y ajustar los cortes directamente sobre el
                   patrón.
                 </li>
                 <li>
@@ -1472,6 +1552,10 @@ export const t = messages(
                 <li>
                   La <b>leyenda</b> lista los hilos, el número de puntos, la longitud de hilo estimada y el
                   plano de montaje.
+                </li>
+                <li>
+                  Opciones: impresión «Color» o «B y N», «Símbolos», «Líneas centrales», «Leyenda de
+                  hilos» y «Marcar puntos bordados».
                 </li>
                 <li>
                   Para un PDF: «Imprimir / PDF» y luego «Guardar como PDF». Desmarca{' '}
@@ -1519,7 +1603,7 @@ export const t = messages(
                 <li>
                   <b>+ Carpeta</b>, y <b>+ Motivo ▾</b>: en blanco, desde una imagen, un patrón PDF o un
                   archivo .json, guardado en la carpeta mostrada. Doble clic en un nombre para cambiarlo;
-                  menú ⋯ para lo demás.
+                  menú ⋯ para lo demás (incluido «Convertir en proyecto», que lo vuelve a hacer proyecto).
                 </li>
                 <li>
                   <b>Arrastra y suelta</b> un motivo o una carpeta sobre una carpeta del árbol para
@@ -1538,7 +1622,8 @@ export const t = messages(
               <H>Crear un motivo</H>
               <UL>
                 <li>
-                  Selecciona puntos y luego «Guardar como motivo» (panel Selección o herramienta Motivos):
+                  Selecciona puntos y luego «Guardar como motivo» (panel Selección) o «Guardar la
+                  selección como motivo» (herramienta Motivos):
                   un nombre y una carpeta elegida en el árbol (o creada en el momento).
                 </li>
                 <li>
@@ -1575,7 +1660,7 @@ export const t = messages(
                 <li>
                   <b>Menú Archivo</b>: <b>Crear</b> (atajos a la ventana Crear: nuevo proyecto, nuevo
                   motivo, desde una imagen, desde un patrón PDF) · <b>Mis archivos</b> (Mis proyectos,
-                  Biblioteca de motivos) · <b>Copia de seguridad</b> (exportar o abrir un proyecto, guardar
+                  Biblioteca de motivos) · <b>Copia de seguridad (.json)</b> (exportar o abrir un proyecto, guardar
                   todo, restaurar).
                 </li>
                 <li>
@@ -1591,18 +1676,18 @@ export const t = messages(
         },
         storage: {
           title: '¿Dónde están mis datos?',
-          keywords: 'almacenamiento copia seguridad datos localstorage navegador perdido desaparecido exportar lleno',
+          keywords: 'almacenamiento copia seguridad datos localstorage indexeddb navegador perdido desaparecido exportar lleno recordatorio sin conexión instalar',
           body: () => (
             <>
               <UL>
                 <li>
                   Los proyectos se <b>guardan automáticamente</b> en el almacenamiento local del navegador,
                   como mucho 10 segundos después de un cambio (aunque sigas dibujando), e inmediatamente
-                  antes de cambiar de pestaña, pasar a otra ventana o cerrar la página.
+                  antes de cambiar de pestaña, minimizar la ventana o cerrar la página.
                 </li>
                 <li>
                   Este almacenamiento es propio de <b>este navegador, este perfil y esta dirección</b> (por
-                  ejemplo <code>localhost:5173</code>). Otro navegador, otro perfil de Chrome u otra
+                  ejemplo <code>stitchnook.github.io</code>). Otro navegador, otro perfil de Chrome u otra
                   dirección no ven los mismos proyectos. La aplicación de escritorio tiene su propio
                   almacenamiento.
                 </li>
@@ -1611,7 +1696,7 @@ export const t = messages(
                   herramienta Texto.
                 </li>
                 <li>
-                  <b>Guardar todo</b> (Archivo → Copia de seguridad): todos los proyectos, motivos y
+                  <b>Guardar todo</b> (menú Archivo, «Copia de seguridad (.json)»): todos los proyectos, motivos y
                   carpetas en un único archivo .json. Para cambiar de ordenador o de navegador, ábrelo allí
                   con <b>Restaurar una copia de seguridad…</b>: se añade lo que falta, no se sobrescribe
                   nada (salvo si eliges reemplazar las versiones más antiguas) y los proyectos abiertos
@@ -1619,15 +1704,27 @@ export const t = messages(
                 </li>
                 <li>
                   Un solo proyecto: <b>Exportar este proyecto</b> (<Kbd k="mod" /> + <Kbd k="S" />) y luego
-                  «Abrir un proyecto exportado…». Un motivo exportado conserva su carpeta.
+                  «Abrir un proyecto exportado…». Un motivo exportado se vuelve a importar con el tipo
+                  «Motivo de biblioteca» (o desde el gestor de motivos); importado sin elegir carpeta,
+                  recupera la suya.
+                </li>
+                <li>
+                  <b>Recordatorio de copia de seguridad</b>: si hay proyectos modificados y no se ha hecho
+                  ninguna copia completa desde hace más de 14 días, la barra de estado propone «Hacer
+                  copia» (descarga una copia completa) o «Más tarde» (oculta el aviso 7 días).
+                </li>
+                <li>
+                  <b>Sin conexión</b>: una vez cargado el sitio, la aplicación funciona sin conexión y se
+                  puede instalar desde el navegador. Solo las fuentes de Google aún no usadas necesitan
+                  conexión.
                 </li>
                 <li>
                   Borrar los datos del sitio en el navegador elimina los proyectos: haz antes una copia de
                   seguridad.
                 </li>
                 <li>
-                  Si el almacenamiento está lleno (unos 5 MB), un mensaje lo indica: exporta y luego elimina
-                  proyectos antiguos.
+                  Hay mucho espacio (una parte del disco); si llegara a faltar, un mensaje lo indica: haz una
+                  copia de seguridad y luego elimina proyectos antiguos.
                 </li>
               </UL>
             </>
@@ -1640,7 +1737,7 @@ export const t = messages(
             <>
               Los atajos de símbolos siguen la <b>posición</b> de las teclas, no el carácter: siguen
               accesibles sin modificador en todos los teclados. En un teclado español, el pincel se
-              ajusta así con <b>`</b> y <b>+</b>. En Chrome y en la aplicación de escritorio, las teclas
+              ajusta así con <b>`</b> y <b>+</b> (con una herramienta sin pincel, <b>+</b> hace zoom). En Chrome y en la aplicación de escritorio, las teclas
               mostradas aquí son las de tu teclado.
             </>
           ),
@@ -1720,14 +1817,18 @@ export const t = messages(
         deselect: 'Auswahl aufheben',
         exportProject: 'Projekt als .json exportieren',
         print: 'Drucken / PDF',
-        clear: 'Auswahl löschen',
+        clear: 'Auswahl löschen (oder Rücktaste)',
         applyPreview: 'Vorschau übernehmen (Einfügen, Text, Transformation)',
         cancelPreview: 'Vorschau verwerfen / Auswahl aufheben / schließen',
         moveSelection: 'Auswahl oder Vorschau verschieben (Umschalt: 10 Stiche)',
         brushKeys: 'Pinsel verkleinern / vergrößern (die zwei Tasten rechts von P)',
         brushWheel: 'Pinselgröße ändern',
         zoom: 'Vergrößern / verkleinern (auch + und − im Ziffernblock)',
-        hand: 'Hand: Ansicht durch Ziehen verschieben',
+        hand: 'Hand: Ansicht durch Ziehen verschieben (oder mit rechter oder mittlerer Maustaste ziehen)',
+        wheelZoom: 'Unter dem Cursor zoomen (oder auf dem Trackpad zusammenziehen)',
+        wheelSideways: 'Ansicht waagerecht scrollen',
+        redoAlt: 'Wiederholen (alternatives Kürzel)',
+        shapeErase: 'Linie, Rechteck, Kreis: gezeichnete Form radieren',
         help: 'Hilfe öffnen (oder ?)',
         overlay: 'Referenzbild ein- / ausblenden',
         panels: 'Seitenleisten aus- / einblenden (Zeichnen im Vollbild)',
@@ -1761,14 +1862,16 @@ export const t = messages(
                   cm).
                 </li>
                 <li>
-                  <b>Ein PDF-Stickmuster</b> aus einer anderen Anwendung oder <b>eine exportierte .json-Datei</b>.
+                  <b>PDF-Muster</b> aus einer anderen Anwendung oder <b>.json-Datei</b> (ein exportiertes
+                  Projekt oder Motiv).
                 </li>
                 <li>
-                  <b>Ein Bild</b>: verwandelt ein Foto oder eine Zeichnung in Kreuzstiche. Stil{' '}
+                  <b>Bild</b>: verwandelt ein Foto oder eine Zeichnung in Kreuzstiche. Stil{' '}
                   <b>Illustration</b> für Zeichnungen und Farbflächen (scharfe Konturen, jeder Stich nimmt
                   die Hauptfarbe seines Bereichs) oder <b>Foto</b> für Verläufe. <b>Zuschneiden</b> entfernt
-                  zum Beispiel die Schaltflächen eines Screenshots; „Kleine Bereiche vereinfachen“ löscht
-                  einzelne Stiche; der Hintergrund wird nur von den Rändern her entfernt.
+                  zum Beispiel die Schaltflächen eines Screenshots; „Kleine Bereiche vereinfachen“ lässt
+                  kleine Flecken in der Nachbarfarbe aufgehen; standardmäßig wird der Hintergrund nur von
+                  den Rändern her entfernt („Hintergrund auch innerhalb des Motivs entfernen“ für alles).
                 </li>
                 <li>Jedes neue Projekt öffnet sich in einem eigenen Tab.</li>
               </UL>
@@ -1786,15 +1889,19 @@ export const t = messages(
               <H>4. Was ist wo</H>
               <UL>
                 <li>
-                  <b>Oben</b>: das Menü Datei, der Projektname, Drucken, das Design und die Hilfe.
+                  <b>Oben</b>: das Menü Datei, der Projektname mit dem Zahnrad seiner Einstellungen
+                  (Mustergröße, Stoff), „Drucken / PDF“, das Design (hell, dunkel oder auto), die Sprache
+                  (FR, EN, ES, DE; die Seite lädt neu, ohne etwas zu verlieren), „Hilfe“ und „Unterstützen“
+                  (Ko-fi).
                 </li>
                 <li>
                   <b>Musterleiste</b> (unter den Tabs): Rückgängig, Zoom, Anzeige, Raster, Druckseiten und
                   das <b>Referenzbild</b> (das Auge blendet es ein oder aus).
                 </li>
                 <li>
-                  <b>Statusleiste</b> (ganz unten): Cursorposition, Größe und die Kürzel zum Bewegen im
-                  Stickmuster.
+                  <b>Statusleiste</b> (ganz unten): Cursorposition, Rastergröße, fertige Größe und Stoff,
+                  gesetzte und gestickte Stiche, Anzahl der Garne, Kürzel zum Bewegen, Speicherstatus und
+                  bei Bedarf eine Erinnerung an die Sicherung.
                 </li>
                 <li>
                   <b>Werkzeugleiste</b>: die einfachen Einstellungen des aktiven Werkzeugs (Größe, Form…).
@@ -1820,10 +1927,14 @@ export const t = messages(
               </UL>
               <H>5. Bewegen</H>
               {viewHints}
+              <P>
+                Ziehen mit der rechten oder mittleren Maustaste verschiebt die Ansicht ebenfalls;{' '}
+                <Kbd k="shift" /> + Mausrad scrollt waagerecht; Zusammenziehen auf dem Trackpad zoomt.
+              </P>
               <H>6. Rückgängig</H>
               <P>
                 <Kbd k="mod" /> + <Kbd k="Z" /> macht rückgängig, <Kbd k="mod" /> + <Kbd k="shift" /> +{' '}
-                <Kbd k="Z" /> wiederholt. Jeder Tab hat seinen eigenen Verlauf.
+                <Kbd k="Z" /> (oder <Kbd k="mod" /> + <Kbd k="Y" />) wiederholt. Jeder Tab hat seinen eigenen Verlauf.
               </P>
             </>
           ),
@@ -1849,6 +1960,7 @@ export const t = messages(
                   <Kbd k="mod" /> + <Kbd k="A" /> wählt alles aus, <Kbd k="mod" /> + <Kbd k="D" /> oder{' '}
                   <Kbd k="Échap" /> hebt die Auswahl auf.
                 </li>
+                <li>Entf oder Rücktaste löscht die ausgewählten Stiche.</li>
               </UL>
               <H>Die Vorschau: Nichts wird geschrieben, bevor du übernimmst</H>
               <P>
@@ -1945,7 +2057,7 @@ export const t = messages(
                   Schaltfläche <b>Referenzbild</b> in der Musterleiste (unter den Tabs). Drag & Drop funktioniert auch.
                 </li>
                 <li>
-                  Einstellbare <b>Deckkraft</b>; <b>Unter den Stichen</b> (deine Stiche verdecken das Bild)
+                  Einstellbare <b>Deckkraft</b>; <b>Unter Stichen</b> (deine Stiche verdecken das Bild)
                   oder <b>Darüber</b> (wie Pauspapier).
                 </li>
                 <li>
@@ -2004,7 +2116,11 @@ export const t = messages(
                   aufgehoben, sonst wird markiert. Modi <b>Markieren</b> / <b>Aufheben</b> zum Erzwingen;{' '}
                   <Kbd k="alt" /> kehrt um.
                 </li>
-                <li>Die Leiste Fortschritt zeigt den Gesamtfortschritt und den pro Farbe, mit „Alle“ / „Rückgängig“.</li>
+                <li>
+                  Die Leiste Fortschritt zeigt den Gesamtfortschritt und den pro Farbe; jede Farbe hat ihre
+                  Schaltfläche „Alle“ („Rückgängig“, sobald fertig), und ↻ „Alles zurücksetzen“ löscht den
+                  ganzen Fortschritt.
+                </li>
                 <li>Ein Markierungsstrich wird in einem Schritt rückgängig gemacht.</li>
               </UL>
             </>
@@ -2022,7 +2138,7 @@ export const t = messages(
                   Stiche so groß wie möglich sind.
                 </li>
                 <li>
-                  Schaltfläche <b>Seiten</b> in der Ansichtsleiste: die Aufteilung direkt im Stickmuster
+                  Schaltfläche <b>Blätter</b> in der Musterleiste: die Aufteilung direkt im Stickmuster
                   sehen und anpassen.
                 </li>
                 <li>
@@ -2032,6 +2148,10 @@ export const t = messages(
                 <li>
                   Die <b>Legende</b> listet die Garne, die Stichzahl, die geschätzte Garnlänge und den
                   Montageplan.
+                </li>
+                <li>
+                  Optionen: Darstellung „Farbe“ oder „S/W“, „Symbole“, „Mittellinien“, „Garnlegende“ und
+                  „Gestickte Stiche markieren“.
                 </li>
                 <li>
                   Für ein PDF: „Drucken / PDF“, dann „Als PDF speichern“. Deaktiviere{' '}
@@ -2079,7 +2199,8 @@ export const t = messages(
                 <li>
                   <b>+ Ordner</b> und <b>+ Motiv ▾</b>: leer, aus einem Bild, einem PDF-Stickmuster oder
                   einer .json-Datei, abgelegt im angezeigten Ordner. Doppelklick auf einen Namen zum
-                  Umbenennen; Menü ⋯ für den Rest.
+                  Umbenennen; Menü ⋯ für den Rest (darunter „In ein Projekt umwandeln“, das wieder ein
+                  Projekt daraus macht).
                 </li>
                 <li>
                   Ein Motiv oder einen Ordner per <b>Drag & Drop</b> auf einen Ordner im Baum ziehen, um es
@@ -2098,7 +2219,8 @@ export const t = messages(
               <H>Ein Motiv erstellen</H>
               <UL>
                 <li>
-                  Stiche auswählen, dann „Als Motiv speichern“ (Auswahl-Leiste oder Werkzeug Motive): ein
+                  Stiche auswählen, dann „Als Motiv speichern“ (Auswahl-Leiste) oder „Auswahl als Motiv
+                  speichern“ (Werkzeug Motive): ein
                   Name und ein im Baum gewählter (oder direkt erstellter) Ordner.
                 </li>
                 <li>
@@ -2123,7 +2245,7 @@ export const t = messages(
                 </li>
                 <li>
                   <b>Meine Projekte</b>: <b>Öffnen</b> (neuer Tab, oder ▾, um den aktuellen Tab zu ersetzen) ·{' '}
-                  <b>Einbetten</b> (das Muster als Vorschau zum Platzieren in das angezeigte Projekt
+                  <b>Einfügen</b> (das Muster als Vorschau zum Platzieren in das angezeigte Projekt
                   kopieren) · ⋯ zum Duplizieren, Exportieren, Löschen oder{' '}
                   <b>In die Bibliothek verschieben</b>.
                 </li>
@@ -2135,12 +2257,12 @@ export const t = messages(
                 </li>
                 <li>
                   <b>Menü Datei</b>: <b>Erstellen</b> (Abkürzungen zum Fenster Erstellen: neues Projekt,
-                  neues Motiv, aus einem Bild, aus einem PDF-Stickmuster) · <b>Meine Dateien</b> (Meine
-                  Projekte, Motivbibliothek) · <b>Sicherung</b> (ein Projekt exportieren oder öffnen, alles
+                  neues Motiv, aus einem Bild, aus einem PDF-Muster) · <b>Meine Dateien</b> (Meine
+                  Projekte, Motivbibliothek) · <b>Sicherung (.json)</b> (ein Projekt exportieren oder öffnen, alles
                   sichern, wiederherstellen).
                 </li>
                 <li>
-                  <b>PDF-Stickmuster einer anderen Anwendung</b>: Datei → „Aus einem PDF-Stickmuster…“. Die
+                  <b>PDF-Stickmuster einer anderen Anwendung</b>: Datei → „Aus einem PDF-Muster…“. Die
                   App liest das Deckblatt (Größe, Stoff), die Legende (DMC-Nummern, Stichzahlen) und jeden
                   Abschnitt und zeigt dann eine Prüfung (gefundene / angegebene Stiche), bevor das Projekt
                   in einem Tab geöffnet wird. Nur ganze Kreuzstiche werden übernommen; PDFs anderer
@@ -2152,18 +2274,18 @@ export const t = messages(
         },
         storage: {
           title: 'Wo sind meine Daten?',
-          keywords: 'speicher sicherung backup daten localstorage browser verloren verschwunden export voll',
+          keywords: 'speicher sicherung backup daten localstorage indexeddb browser verloren verschwunden export voll erinnerung offline installieren',
           body: () => (
             <>
               <UL>
                 <li>
                   Projekte werden <b>automatisch gespeichert</b>, im lokalen Speicher des Browsers,
                   spätestens 10 Sekunden nach einer Änderung (auch wenn du weiterzeichnest) und sofort,
-                  bevor du den Tab wechselst, zu einem anderen Fenster gehst oder die Seite schließt.
+                  wenn du den Tab wechselst, das Fenster minimierst oder die Seite schließt.
                 </li>
                 <li>
                   Dieser Speicher gehört zu <b>diesem Browser, diesem Profil und dieser Adresse</b> (zum
-                  Beispiel <code>localhost:5173</code>). Ein anderer Browser, ein anderes Chrome-Profil
+                  Beispiel <code>stitchnook.github.io</code>). Ein anderer Browser, ein anderes Chrome-Profil
                   oder eine andere Adresse sehen nicht dieselben Projekte. Die Desktop-App hat ihren eigenen
                   Speicher.
                 </li>
@@ -2172,7 +2294,7 @@ export const t = messages(
                   das Text-Werkzeug.
                 </li>
                 <li>
-                  <b>Alles sichern</b> (Datei → Sicherung): alle Projekte, Motive und Ordner in einer
+                  <b>Alles sichern</b> (Menü Datei, „Sicherung (.json)“): alle Projekte, Motive und Ordner in einer
                   einzigen .json-Datei. Um Computer oder Browser zu wechseln, öffne sie dort mit{' '}
                   <b>Sicherung wiederherstellen…</b>: Fehlendes wird hinzugefügt, nichts wird
                   überschrieben (außer du entscheidest dich, ältere Versionen zu ersetzen), und offene
@@ -2180,15 +2302,27 @@ export const t = messages(
                 </li>
                 <li>
                   Ein einzelnes Projekt: <b>Dieses Projekt exportieren</b> (<Kbd k="mod" /> + <Kbd k="S" />),
-                  dann „Exportiertes Projekt öffnen…“. Ein exportiertes Motiv behält seinen Ordner.
+                  dann „Exportiertes Projekt öffnen…“. Ein exportiertes Motiv wird mit dem Typ
+                  „Bibliotheksmotiv“ (oder über die Motivverwaltung) wieder importiert; ohne gewählten
+                  Ordner kommt es in seinen eigenen zurück.
+                </li>
+                <li>
+                  <b>Sicherungserinnerung</b>: Wenn sich Projekte geändert haben und seit über 14 Tagen
+                  keine vollständige Sicherung erstellt wurde, bietet die Statusleiste „Sichern“ (lädt eine
+                  vollständige Sicherung herunter) oder „Später“ (blendet die Erinnerung 7 Tage aus) an.
+                </li>
+                <li>
+                  <b>Offline</b>: Sobald die Seite geladen ist, funktioniert die App ohne Verbindung und
+                  lässt sich über den Browser installieren. Nur noch nicht verwendete Google-Schriften
+                  brauchen eine Verbindung.
                 </li>
                 <li>
                   Das Löschen der Website-Daten im Browser löscht die Projekte: Erstelle vorher eine
                   Sicherung.
                 </li>
                 <li>
-                  Ist der Speicher voll (etwa 5 MB), weist eine Meldung darauf hin: Exportiere, dann lösche
-                  alte Projekte.
+                  Es gibt reichlich Platz (ein Teil der Festplatte); wird er doch knapp, weist eine Meldung
+                  darauf hin: Sichere, dann lösche alte Projekte.
                 </li>
               </UL>
             </>
@@ -2201,7 +2335,7 @@ export const t = messages(
             <>
               Kürzel auf Symboltasten richten sich nach der <b>Position</b> der Tasten, nicht nach dem
               Zeichen: Sie bleiben auf jeder Tastatur ohne Zusatztaste erreichbar. Auf einer deutschen
-              QWERTZ-Tastatur stellst du den Pinsel so mit <b>Ü</b> und <b>+</b> ein. In Chrome und der
+              QWERTZ-Tastatur stellst du den Pinsel so mit <b>Ü</b> und <b>+</b> ein (bei einem Werkzeug ohne Pinsel zoomt <b>+</b>). In Chrome und der
               Desktop-App sind die hier angezeigten Tasten die deiner Tastatur.
             </>
           ),

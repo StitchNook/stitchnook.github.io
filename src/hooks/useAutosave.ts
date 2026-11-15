@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { StorageFullError, saveProject, setLastOpenedId } from '../lib/storage'
+import { subscribeDataErrors } from '../lib/db'
 import type { Project } from '../lib/types'
 import { t } from './useAutosave.i18n'
 
@@ -68,6 +69,15 @@ export function useAutosave(project: Project, delay = AUTOSAVE_DELAY): SaveState
     pending.current = null
     write(target)
   }, [write])
+
+  // Background writes to IndexedDB that fail (disk full…) surface here.
+  useEffect(
+    () =>
+      subscribeDataErrors(() => {
+        setState({ status: 'error', message: t.storageFull })
+      }),
+    [],
+  )
 
   useEffect(() => {
     const onHidden = () => {

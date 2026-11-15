@@ -35,9 +35,18 @@ export const TOOL_HINTS: Record<ToolId, Hint[]> = {
   eraser: [BRUSH_SIZE_HINT, BRUSH_WHEEL_HINT],
   fill: [{ keys: ['alt', 'clic'], label: t.hints.clearArea, when: 'alt' }],
   picker: [{ keys: ['clic'], label: t.hints.pickThread }],
-  line: [{ keys: ['shift'], label: t.hints.angles45, when: 'shift' }],
-  rect: [{ keys: ['shift'], label: t.hints.square, when: 'shift' }],
-  ellipse: [{ keys: ['shift'], label: t.hints.circle, when: 'shift' }],
+  line: [
+    { keys: ['shift'], label: t.hints.angles45, when: 'shift' },
+    { keys: ['alt'], label: t.hints.erase, when: 'alt' },
+  ],
+  rect: [
+    { keys: ['shift'], label: t.hints.square, when: 'shift' },
+    { keys: ['alt'], label: t.hints.erase, when: 'alt' },
+  ],
+  ellipse: [
+    { keys: ['shift'], label: t.hints.circle, when: 'shift' },
+    { keys: ['alt'], label: t.hints.erase, when: 'alt' },
+  ],
   select: [
     { keys: ['shift'], label: t.hints.addArea, when: 'shift' },
     { keys: ['alt'], label: t.hints.removeArea, when: 'alt' },
@@ -46,7 +55,7 @@ export const TOOL_HINTS: Record<ToolId, Hint[]> = {
     { keys: ['Échap'], label: t.hints.cancel },
   ],
   text: [
-    { keys: ['clic', '↑↓←→'], label: t.hints.movePreview },
+    { keys: ['glisser', '↑↓←→'], label: t.hints.movePreview, either: true },
     { keys: ['Entrée'], label: t.hints.apply },
   ],
   progress: [
@@ -104,6 +113,7 @@ const S = t.shortcuts
 export const SHORTCUTS: { keys: HintKey[]; label: string; either?: boolean }[] = [
   { keys: ['mod', 'Z'], label: S.undo },
   { keys: ['mod', 'shift', 'Z'], label: S.redo },
+  { keys: ['mod', 'Y'], label: S.redoAlt },
   { keys: ['mod', 'C'], label: S.copy },
   { keys: ['mod', 'X'], label: S.cut },
   { keys: ['mod', 'V'], label: S.paste },
@@ -121,11 +131,14 @@ export const SHORTCUTS: { keys: HintKey[]; label: string; either?: boolean }[] =
     either: true,
   },
   { keys: ['alt', 'molette'], label: S.brushWheel },
+  { keys: ['alt', 'glisser'], label: S.shapeErase },
   {
     keys: [codeToken('Equal'), codeToken('Minus')],
     label: S.zoom,
     either: true,
   },
+  { keys: ['mod', 'molette'], label: S.wheelZoom },
+  { keys: ['shift', 'molette'], label: S.wheelSideways },
   { keys: ['space'], label: S.hand },
   { keys: ['F1'], label: S.help },
   { keys: ['H'], label: S.overlay },

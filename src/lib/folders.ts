@@ -7,6 +7,7 @@
 
 import { LOCALE } from '../i18n'
 import { notifyStoreChange } from './storeEvents'
+import { dataGet, dataSet } from './db'
 import { t } from './folders.i18n'
 
 export type MotifFolder = { id: string; name: string; parentId: string | null }
@@ -17,7 +18,7 @@ export const ROOT_NAME = t.root
 
 export function listFolders(): MotifFolder[] {
   try {
-    const raw = localStorage.getItem(FOLDERS_KEY)
+    const raw = dataGet(FOLDERS_KEY)
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     return Array.isArray(parsed) ? parsed.filter(isFolder) : []
@@ -27,7 +28,7 @@ export function listFolders(): MotifFolder[] {
 }
 
 export function saveFolders(folders: MotifFolder[]): void {
-  localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders))
+  dataSet(FOLDERS_KEY, JSON.stringify(folders))
   notifyStoreChange()
 }
 

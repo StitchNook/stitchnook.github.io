@@ -4,6 +4,7 @@ import { listMotifs } from '../lib/motifs'
 import { loadProject, type ProjectMeta } from '../lib/storage'
 import { storeVersion, subscribeStore } from '../lib/storeEvents'
 import type { Project } from '../lib/types'
+import { dataGet } from '../lib/db'
 
 export type MotifItem = { entry: ProjectMeta; project: Project }
 
@@ -40,7 +41,7 @@ function readStored() {
 function readFolders() {
   let raw: string | null = null
   try {
-    raw = localStorage.getItem('stitchly.motifFolders.v1')
+    raw = dataGet('stitchly.motifFolders.v1')
   } catch {
     /* Unavailable storage: no folders. */
   }

@@ -705,6 +705,15 @@ export default function App() {
 
       // Symbol keys go by physical position, so they are one keystroke on any
       // layout (e.g. ^ and $ for the brush on a French AZERTY keyboard).
+      // The brush comes first: on German / Spanish layouts the key right of P
+      // prints "+", which would otherwise zoom instead of growing the brush.
+      const grow = matches(event, SHORTCUT_KEYS.brushBigger)
+      if ((grow || matches(event, SHORTCUT_KEYS.brushSmaller)) && isBrushTool(editor.tool)) {
+        event.preventDefault()
+        const current = editor.brushes[editor.tool].size
+        editor.setBrush(editor.tool, { size: current + (grow ? 1 : -1) })
+        return
+      }
       if (matches(event, SHORTCUT_KEYS.zoomIn)) {
         event.preventDefault()
         viewportApi.zoomBy(1.25, canvasSize)
@@ -713,14 +722,6 @@ export default function App() {
       if (matches(event, SHORTCUT_KEYS.zoomOut)) {
         event.preventDefault()
         viewportApi.zoomBy(0.8, canvasSize)
-        return
-      }
-      const grow = matches(event, SHORTCUT_KEYS.brushBigger)
-      if (grow || matches(event, SHORTCUT_KEYS.brushSmaller)) {
-        if (!isBrushTool(editor.tool)) return
-        event.preventDefault()
-        const current = editor.brushes[editor.tool].size
-        editor.setBrush(editor.tool, { size: current + (grow ? 1 : -1) })
         return
       }
 

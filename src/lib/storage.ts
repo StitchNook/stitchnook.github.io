@@ -1,6 +1,7 @@
 import { MAX_SIZE, MIN_SIZE, decodeCells, decodeFlags, encodeRLE } from './grid'
 import type { Project, ProjectKind, SerialisedProject } from './types'
 import { notifyStoreChange } from './storeEvents'
+import { dataGet, dataRemove, dataSet } from './db'
 import { t } from './storage.i18n'
 import { ensurePath, folderPath, isFolder, listFolders, saveFolders, type MotifFolder } from './folders'
 
@@ -98,11 +99,11 @@ export function deserialise(raw: unknown): Project {
   }
 }
 
-/* ------------------------------------------------------------ local storage */
+/* ------------------------------------------- persistence (IndexedDB, see db.ts) */
 
 export function listProjects(): ProjectMeta[] {
   try {
-    const raw = localStorage.getItem(INDEX_KEY)
+    const raw = dataGet(INDEX_KEY)
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
@@ -113,13 +114,13 @@ export function listProjects(): ProjectMeta[] {
 }
 
 function writeIndex(entries: ProjectMeta[]) {
-  localStorage.setItem(INDEX_KEY, JSON.stringify(entries))
+  dataSet(INDEX_KEY, JSON.stringify(entries))
 }
 
 export function saveProject(project: Project): void {
   const payload = JSON.stringify(serialise(project))
   try {
-    localStorage.setItem(PROJECT_KEY(project.id), payload)
+    dataSet(PROJECT_KEY(project.id), payload)
   } catch {
     throw new StorageFullError()
   }
@@ -149,7 +150,7 @@ export function saveProject(project: Project): void {
 
 export function loadProject(id: string): Project | null {
   try {
-    const raw = localStorage.getItem(PROJECT_KEY(id))
+    const raw = dataGet(PROJECT_KEY(id))
     if (!raw) return null
     return deserialise(JSON.parse(raw))
   } catch {
@@ -159,7 +160,8 @@ export function loadProject(id: string): Project | null {
 
 export function deleteProject(id: string): void {
   try {
-    localStorage.removeItem(PROJECT_KEY(id))
+    dataRemove(PROJECT_KEY(id))
+    dataRemove(`stitchly.reference.${id}`)
     writeIndex(listProjects().filter((entry) => entry.id !== id))
     notifyStoreChange()
   } catch {

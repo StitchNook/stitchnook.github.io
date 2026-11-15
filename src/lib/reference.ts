@@ -23,6 +23,7 @@ export type Reference = {
 }
 
 import { t } from './reference.i18n'
+import { dataGet, dataRemove, dataSet } from './db'
 
 const MAX_SIDE = 1600
 const key = (projectId: string) => `stitchly.reference.${projectId}`
@@ -57,7 +58,7 @@ export function fitToGrid(naturalWidth: number, naturalHeight: number, gridWidth
 
 export function loadReference(projectId: string): Reference | null {
   try {
-    const raw = localStorage.getItem(key(projectId))
+    const raw = dataGet(key(projectId))
     if (!raw) return null
     const parsed = JSON.parse(raw) as Reference
     return typeof parsed?.src === 'string' ? parsed : null
@@ -68,8 +69,8 @@ export function loadReference(projectId: string): Reference | null {
 
 export function saveReference(projectId: string, reference: Reference | null): void {
   try {
-    if (reference) localStorage.setItem(key(projectId), JSON.stringify(reference))
-    else localStorage.removeItem(key(projectId))
+    if (reference) dataSet(key(projectId), JSON.stringify(reference))
+    else dataRemove(key(projectId))
   } catch {
     throw new ReferenceStorageError(t.storageFull)
   }

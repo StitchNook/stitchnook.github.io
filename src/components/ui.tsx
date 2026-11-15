@@ -370,6 +370,7 @@ const MODIFIER_LABELS: Record<string, () => string> = {
   clic: () => t.keys.click,
   click: () => t.keys.click,
   molette: () => t.keys.wheel,
+  Suppr: () => KEYS.del,
   wheel: () => t.keys.wheel,
 }
 
