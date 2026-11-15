@@ -40,7 +40,7 @@ const TEXT = {
       'Validez, retouchez au crayon si besoin, puis imprimez ou enregistrez en PDF.',
     ],
     freeTitle: 'Pourquoi c’est gratuit ?',
-    free: 'Les logiciels de point de croix en ligne sont presque tous payants ou très limités en version gratuite. Stitchnook est un projet indépendant et open source, financé uniquement par les dons de celles et ceux qui l’utilisent. Si l’outil vous rend service, vous pouvez offrir un café : ça aide à le garder gratuit pour tout le monde.',
+    free: 'Les logiciels de point de croix en ligne sont presque tous payants ou très limités en version gratuite. Stitchnook est un projet indépendant et open source, financé uniquement par les dons de celles et ceux qui l’utilisent. Si l’outil vous rend service, vous pouvez soutenir le projet : ça aide à le garder gratuit pour tout le monde.',
     tip: 'Soutenir sur Ko-fi',
     privacyTitle: 'Vos données restent chez vous',
     privacy: 'Aucun compte, aucun cookie, aucun suivi publicitaire. Vos projets sont enregistrés dans votre navigateur, sur votre appareil. Pensez à faire régulièrement une sauvegarde (depuis le menu des fichiers) : elle tient dans un simple fichier que vous gardez où vous voulez. L’outil Texte charge ses polices depuis Google Fonts.',
@@ -74,7 +74,7 @@ const TEXT = {
       'Confirm, touch up with the pencil if needed, then print or save as PDF.',
     ],
     freeTitle: 'Why is it free?',
-    free: 'Almost every online cross-stitch tool is paid, or heavily limited in its free version. Stitchnook is an independent, open-source project funded only by tips from the people who use it. If it helps you, you can buy me a coffee: it keeps it free for everyone.',
+    free: 'Almost every online cross-stitch tool is paid, or heavily limited in its free version. Stitchnook is an independent, open-source project funded only by tips from the people who use it. If it helps you, you can support the project: it keeps it free for everyone.',
     tip: 'Support on Ko-fi',
     privacyTitle: 'Your data stays with you',
     privacy: 'No account, no cookies, no ad tracking. Your projects are saved in your browser, on your device. Make a backup from time to time (from the files menu): it is a single file you can keep anywhere. The Text tool loads its fonts from Google Fonts.',
@@ -108,7 +108,7 @@ const TEXT = {
       'Confirma, retoca con el lápiz si hace falta y luego imprime o guarda en PDF.',
     ],
     freeTitle: '¿Por qué es gratis?',
-    free: 'Casi todos los programas de punto de cruz en línea son de pago o muy limitados en su versión gratuita. Stitchnook es un proyecto independiente y de código abierto, financiado solo con las donaciones de quienes lo usan. Si te resulta útil, puedes invitarme a un café: ayuda a mantenerlo gratis para todos.',
+    free: 'Casi todos los programas de punto de cruz en línea son de pago o muy limitados en su versión gratuita. Stitchnook es un proyecto independiente y de código abierto, financiado solo con las donaciones de quienes lo usan. Si te resulta útil, puedes apoyar el proyecto: ayuda a mantenerlo gratis para todos.',
     tip: 'Apoyar en Ko-fi',
     privacyTitle: 'Tus datos se quedan contigo',
     privacy: 'Sin cuenta, sin cookies, sin rastreo publicitario. Tus proyectos se guardan en tu navegador, en tu dispositivo. Haz una copia de seguridad de vez en cuando (desde el menú de archivos): es un solo archivo que puedes guardar donde quieras. La herramienta Texto carga sus fuentes desde Google Fonts.',
@@ -142,7 +142,7 @@ const TEXT = {
       'Übernehmen, bei Bedarf mit dem Stift nacharbeiten, dann drucken oder als PDF speichern.',
     ],
     freeTitle: 'Warum ist es kostenlos?',
-    free: 'Fast alle Kreuzstich-Programme im Netz kosten Geld oder sind in der Gratisversion stark eingeschränkt. Stitchnook ist ein unabhängiges Open-Source-Projekt, das nur durch Spenden der Nutzerinnen und Nutzer finanziert wird. Wenn es dir hilft, kannst du mir einen Kaffee spendieren – so bleibt es für alle kostenlos.',
+    free: 'Fast alle Kreuzstich-Programme im Netz kosten Geld oder sind in der Gratisversion stark eingeschränkt. Stitchnook ist ein unabhängiges Open-Source-Projekt, das nur durch Spenden der Nutzerinnen und Nutzer finanziert wird. Wenn es dir hilft, kannst du das Projekt unterstützen – so bleibt es für alle kostenlos.',
     tip: 'Auf Ko-fi unterstützen',
     privacyTitle: 'Deine Daten bleiben bei dir',
     privacy: 'Kein Konto, keine Cookies, kein Werbetracking. Deine Projekte werden in deinem Browser auf deinem Gerät gespeichert. Mach ab und zu eine Sicherung (über das Dateimenü): Das ist eine einzige Datei, die du aufbewahren kannst, wo du willst. Das Text-Werkzeug lädt seine Schriften von Google Fonts.',
@@ -230,7 +230,7 @@ function page(lang) {
 
       <h2>${esc(t.freeTitle)}</h2>
       <p>${esc(t.free)}</p>
-      <a class="button secondary" href="${KOFI}" rel="noopener">☕ ${esc(t.tip)}</a>
+      <a class="button secondary" href="${KOFI}" rel="noopener">♥ ${esc(t.tip)}</a>
 
       <h2>${esc(t.privacyTitle)}</h2>
       <p>${esc(t.privacy)}</p>

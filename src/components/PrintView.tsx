@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from 'react'
 import { Printer, X } from 'lucide-react'
-import { KOFI_URL } from '../lib/support'
+import { KOFI_URL, SUPPORT_ENABLED } from '../lib/support'
+import { markSupporter } from '../lib/supportPrompt'
 import { EMPTY, countByThread, idx } from '../lib/grid'
 import { dmcByCode, readableInk } from '../lib/dmc'
 import { estimateThreadMetres, formatLength, stitchesToPhysical } from '../lib/units'
@@ -130,12 +131,14 @@ export function PrintView({
             </Button>
           </div>
         </div>
-        <p className="w-full text-xs text-slate-400">
-          {t.thanks}{' '}
-          <a href={KOFI_URL} target="_blank" rel="noopener" className="font-medium text-sky-400 hover:underline">
-            ☕ Ko-fi
-          </a>
-        </p>
+        {SUPPORT_ENABLED ? (
+          <p className="w-full text-xs text-slate-400">
+            {t.thanks}{' '}
+            <a href={KOFI_URL} target="_blank" rel="noopener" onClick={() => markSupporter()} className="font-medium text-sky-400 hover:underline">
+              ♥ Ko-fi
+            </a>
+          </p>
+        ) : null}
       </div>
 
       <div className="mx-auto flex max-w-fit flex-col items-center gap-5">

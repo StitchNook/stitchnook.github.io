@@ -50,8 +50,8 @@ import { IS_ELECTRON, shortcut } from './lib/platform'
 import { isBrushTool } from './lib/brush'
 import { SHORTCUT_KEYS, isTextEntry, matches } from './lib/keys'
 import { LANG, LANGS, LANG_NAMES, setLang } from './i18n'
-import { KOFI_URL } from './lib/support'
-import { canPrompt, markShown, recordUsageDay, type SupportMoment } from './lib/supportPrompt'
+import { KOFI_URL, SUPPORT_ENABLED } from './lib/support'
+import { canPrompt, markShown, markSupporter, recordUsageDay, type SupportMoment } from './lib/supportPrompt'
 import { SupportCard } from './components/SupportCard'
 import { t } from './App.i18n'
 
@@ -324,8 +324,10 @@ export default function App() {
   const createFromImage = (result: ImageImportResult) => {
     const created = { ...createProject(result), palette: result.palette, cells: result.cells }
     if (result.kind === 'motif') addCompleteMotif({ ...created, kind: 'motif', folderId: result.folderId })
-    else openProject(created)
-    suggestSupport('import', 1500)
+    else {
+      openProject(created)
+      suggestSupport('import', 1500)
+    }
   }
 
   const pickThread = useCallback(
@@ -913,16 +915,21 @@ export default function App() {
           <Button size="sm" variant="ghost" onClick={() => setHelp('start')} title={t.helpTitle}>
             <CircleHelp size={14} /> {t.help}
           </Button>
-          <span className="mx-1.5 h-5 w-px bg-panel-line" />
-          <a
-            href={KOFI_URL}
-            target="_blank"
-            rel="noopener"
-            title={t.supportTitle}
-            className="flex items-center gap-1.5 rounded-full border border-rose-500/50 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400 hover:bg-rose-500/20"
-          >
-            <Heart size={13} className="fill-rose-500 text-rose-500" /> {t.support}
-          </a>
+          {SUPPORT_ENABLED ? (
+            <>
+              <span className="mx-1.5 h-5 w-px bg-panel-line" />
+              <a
+                href={KOFI_URL}
+                target="_blank"
+                rel="noopener"
+                title={t.supportTitle}
+                onClick={() => markSupporter()}
+                className="flex items-center gap-1.5 rounded-full border border-rose-500/50 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400 hover:bg-rose-500/20"
+              >
+                <Heart size={13} className="fill-rose-500 text-rose-500" /> {t.support}
+              </a>
+            </>
+          ) : null}
         </div>
       </header>
 
@@ -1207,6 +1214,7 @@ export default function App() {
           onBlank={(result) => {
             setCreate(null)
             applySettings(result, 'new')
+            if (result.kind !== 'motif') suggestSupport('create', 1200)
           }}
           onImage={(result) => {
             setCreate(null)
@@ -1215,8 +1223,10 @@ export default function App() {
           onPdf={(imported) => {
             setCreate(null)
             if (imported.kind === 'motif') addCompleteMotif(imported)
-            else openProject(imported, 'tab')
-            suggestSupport('import', 1500)
+            else {
+              openProject(imported, 'tab')
+              suggestSupport('import', 1500)
+            }
           }}
           onJson={(file, kind, folderId) => {
             importProjectFile(file)

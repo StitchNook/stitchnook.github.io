@@ -45,6 +45,9 @@
   --color-rose-200: oklch(45.5% 0.188 13.697);
   --color-rose-300: oklch(51.4% 0.222 16.935);
   --color-rose-400: oklch(58.6% 0.253 17.585);
+  --color-violet-200: oklch(43.2% 0.232 292.759);
+  --color-violet-300: oklch(49.1% 0.27 292.581);
+  --color-violet-400: oklch(54.1% 0.281 293.009);
   --color-emerald-400: oklch(59.6% 0.145 163.225);
 }
 

@@ -10,6 +10,7 @@ import { ProjectSettings, type ProjectSettingsResult } from './ProjectSettings'
 import { Button, Modal, SegmentedControl } from './ui'
 import { CreateBody } from './CreateLayout'
 import { t } from './CreateDialog.i18n'
+import { SupportButton } from './SupportCard'
 
 export type CreateSource = 'blank' | 'image' | 'pdf' | 'json'
 
@@ -173,7 +174,10 @@ export function CreateDialog(props: {
       title={title}
       onClose={props.onClose}
       footer={
-        <Button onClick={props.onClose}>{t.cancel}</Button>
+        <>
+          <SupportButton />
+          <Button onClick={props.onClose}>{t.cancel}</Button>
+        </>
       }
     >
       <CreateBody header={header}>

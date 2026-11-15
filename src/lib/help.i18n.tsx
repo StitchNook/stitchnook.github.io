@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { messages } from '../i18n'
 import { Kbd } from '../components/ui'
 import { H, P, UL } from '../components/HelpBlocks'
+import { SUPPORT_ENABLED } from './support'
 
 /*
  * Texts of the help centre and of the shortcut hints.
@@ -152,7 +153,7 @@ export const t = messages(
               <li>
                 <b>En haut</b> : le menu Fichier, le nom du projet et la roue de ses paramètres (taille de
                 la grille, toile), « Imprimer / PDF », le thème (clair, sombre ou auto), la langue (FR, EN,
-                ES, DE ; la page se recharge sans rien perdre), « Aide » et « Soutenir » (Ko-fi).
+                ES, DE ; la page se recharge sans rien perdre), « Aide »{SUPPORT_ENABLED ? <> et « Soutenir » (Ko-fi)</> : null}.
               </li>
               <li>
                 <b>Barre de la planche</b> (sous les onglets) : annuler, zoom, affichage, grille, planches
@@ -527,8 +528,8 @@ export const t = messages(
           <>
             <UL>
               <li>
-                Les projets sont <b>enregistrés automatiquement</b> dans le stockage local du navigateur,
-                au plus tard 10 secondes après une modification (même si vous continuez à dessiner), et
+                Les projets sont <b>enregistrés automatiquement</b> dans la base de données du navigateur
+                (IndexedDB), sur votre appareil, au plus tard 10 secondes après une modification (même si vous continuez à dessiner), et
                 immédiatement avant de changer d’onglet, de réduire la fenêtre ou de fermer la page.
               </li>
               <li>
@@ -563,7 +564,10 @@ export const t = messages(
                 demandent une connexion.
               </li>
               <li>
-                Vider les données du site dans le navigateur efface les projets : sauvegardez d’abord.
+                Vider les données du site dans le navigateur efface les projets, et Safari peut effacer
+                celles d’un site non visité pendant plusieurs semaines (sauf application installée). La
+                sauvegarde complète est la seule copie qui ne dépend pas du navigateur : faites-en
+                régulièrement.
               </li>
               <li>
                 La place disponible est large (une part du disque) ; si elle venait à manquer, un message
@@ -732,7 +736,7 @@ export const t = messages(
                 <li>
                   <b>Top</b>: the File menu, the project name and its settings cog (chart size, fabric),
                   “Print / PDF”, the theme (light, dark or auto), the language (FR, EN, ES, DE; the page
-                  reloads without losing anything), “Help” and “Support” (Ko-fi).
+                  reloads without losing anything), “Help”{SUPPORT_ENABLED ? <> and “Support” (Ko-fi)</> : null}.
                 </li>
                 <li>
                   <b>Chart bar</b> (below the tabs): undo, zoom, display, grid, print sheets and the{' '}
@@ -1100,8 +1104,8 @@ export const t = messages(
             <>
               <UL>
                 <li>
-                  Projects are <b>saved automatically</b> in the browser’s local storage, at most 10
-                  seconds after a change (even if you keep drawing), and immediately before you switch
+                  Projects are <b>saved automatically</b> in the browser’s database (IndexedDB), on your
+                  device, at most 10 seconds after a change (even if you keep drawing), and immediately before you switch
                   tabs, minimize the window or close the page.
                 </li>
                 <li>
@@ -1133,7 +1137,11 @@ export const t = messages(
                   <b>Offline</b>: once the site has loaded, the app works without a connection and can be
                   installed from the browser. Only Google fonts not used yet need a connection.
                 </li>
-                <li>Clearing the site’s data in the browser erases the projects: back up first.</li>
+                <li>
+                  Clearing the site’s data in the browser erases the projects, and Safari may clear the
+                  data of a site not visited for several weeks (unless the app is installed). A full
+                  backup is the only copy that does not depend on the browser: make one regularly.
+                </li>
                 <li>
                   There is plenty of room (a share of the disk); if it ever runs out, a message says so:
                   back up, then delete old projects.
@@ -1301,7 +1309,7 @@ export const t = messages(
                 <li>
                   <b>Arriba</b>: el menú Archivo, el nombre del proyecto y la rueda de sus ajustes (tamaño
                   del patrón, tela), «Imprimir / PDF», el tema (claro, oscuro o auto), el idioma (FR, EN,
-                  ES, DE; la página se recarga sin perder nada), «Ayuda» y «Apoyar» (Ko-fi).
+                  ES, DE; la página se recarga sin perder nada), «Ayuda»{SUPPORT_ENABLED ? <> y «Apoyar» (Ko-fi)</> : null}.
                 </li>
                 <li>
                   <b>Barra del patrón</b> (bajo las pestañas): deshacer, zoom, visualización, cuadrícula,
@@ -1681,8 +1689,8 @@ export const t = messages(
             <>
               <UL>
                 <li>
-                  Los proyectos se <b>guardan automáticamente</b> en el almacenamiento local del navegador,
-                  como mucho 10 segundos después de un cambio (aunque sigas dibujando), e inmediatamente
+                  Los proyectos se <b>guardan automáticamente</b> en la base de datos del navegador
+                  (IndexedDB), en tu dispositivo, como mucho 10 segundos después de un cambio (aunque sigas dibujando), e inmediatamente
                   antes de cambiar de pestaña, minimizar la ventana o cerrar la página.
                 </li>
                 <li>
@@ -1719,8 +1727,10 @@ export const t = messages(
                   conexión.
                 </li>
                 <li>
-                  Borrar los datos del sitio en el navegador elimina los proyectos: haz antes una copia de
-                  seguridad.
+                  Borrar los datos del sitio en el navegador elimina los proyectos, y Safari puede borrar
+                  los de un sitio no visitado durante varias semanas (salvo si la aplicación está
+                  instalada). La copia de seguridad completa es la única que no depende del navegador:
+                  hazla con regularidad.
                 </li>
                 <li>
                   Hay mucho espacio (una parte del disco); si llegara a faltar, un mensaje lo indica: haz una
@@ -1891,8 +1901,7 @@ export const t = messages(
                 <li>
                   <b>Oben</b>: das Menü Datei, der Projektname mit dem Zahnrad seiner Einstellungen
                   (Mustergröße, Stoff), „Drucken / PDF“, das Design (hell, dunkel oder auto), die Sprache
-                  (FR, EN, ES, DE; die Seite lädt neu, ohne etwas zu verlieren), „Hilfe“ und „Unterstützen“
-                  (Ko-fi).
+                  (FR, EN, ES, DE; die Seite lädt neu, ohne etwas zu verlieren), „Hilfe“{SUPPORT_ENABLED ? <> und „Unterstützen“ (Ko-fi)</> : null}.
                 </li>
                 <li>
                   <b>Musterleiste</b> (unter den Tabs): Rückgängig, Zoom, Anzeige, Raster, Druckseiten und
@@ -2279,8 +2288,8 @@ export const t = messages(
             <>
               <UL>
                 <li>
-                  Projekte werden <b>automatisch gespeichert</b>, im lokalen Speicher des Browsers,
-                  spätestens 10 Sekunden nach einer Änderung (auch wenn du weiterzeichnest) und sofort,
+                  Projekte werden <b>automatisch gespeichert</b>, in der Datenbank des Browsers
+                  (IndexedDB) auf deinem Gerät, spätestens 10 Sekunden nach einer Änderung (auch wenn du weiterzeichnest) und sofort,
                   wenn du den Tab wechselst, das Fenster minimierst oder die Seite schließt.
                 </li>
                 <li>
@@ -2317,8 +2326,10 @@ export const t = messages(
                   brauchen eine Verbindung.
                 </li>
                 <li>
-                  Das Löschen der Website-Daten im Browser löscht die Projekte: Erstelle vorher eine
-                  Sicherung.
+                  Das Löschen der Website-Daten im Browser löscht die Projekte, und Safari kann die Daten
+                  einer Website löschen, die mehrere Wochen nicht besucht wurde (außer bei installierter
+                  App). Die vollständige Sicherung ist die einzige Kopie, die nicht vom Browser abhängt:
+                  Erstelle sie regelmäßig.
                 </li>
                 <li>
                   Es gibt reichlich Platz (ein Teil der Festplatte); wird er doch knapp, weist eine Meldung

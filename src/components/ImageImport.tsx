@@ -23,6 +23,7 @@ import {
 import type { Adjustments, ConversionOptions, ConversionResult, CropRect } from '../lib/imageConvert'
 import type { Fabric, ProjectKind, Thread } from '../lib/types'
 import { t } from './ImageImport.i18n'
+import { SupportButton } from './SupportCard'
 
 export type ImageImportResult = {
   name: string
@@ -234,6 +235,7 @@ export function ImageImport(props: ImageImportProps) {
       onClose={props.onClose}
       footer={
         <>
+          <SupportButton pushRight={false} />
           <span className="mr-auto self-center text-xs text-slate-500">
             {result
               ? t.footer(result.width, result.height, stitches, result.codes.length)

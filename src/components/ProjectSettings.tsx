@@ -12,6 +12,7 @@ const Body = (props: { header?: ReactNode; children: ReactNode }) =>
   props.header !== undefined ? <CreateBody header={props.header}>{props.children}</CreateBody> : <>{props.children}</>
 import { shortcut } from '../lib/platform'
 import { t } from './ProjectSettings.i18n'
+import { SupportButton } from './SupportCard'
 
 export type ProjectSettingsResult = {
   name: string
@@ -57,6 +58,7 @@ export function ProjectSettings(props: ProjectSettingsProps) {
       onClose={props.onClose}
       footer={
         <>
+          {props.mode === 'new' ? <SupportButton /> : null}
           <Button onClick={props.onClose}>{t.cancel}</Button>
           <Button
             variant="primary"
