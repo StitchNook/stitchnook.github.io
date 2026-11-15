@@ -11,7 +11,8 @@
     "electron": "vite build && electron .",
     "electron:dev": "VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
     "dist:win": "tsc -b && vite build && electron-builder --win --x64",
-    "dist:mac": "tsc -b && vite build && electron-builder --mac --arm64"
+    "dist:mac": "tsc -b && vite build && electron-builder --mac --arm64",
+    "deploy": "npm run build && npm run lint && sh scripts/publish.sh"
   },
   "dependencies": {
     "lucide-react": "^1.61.0",
