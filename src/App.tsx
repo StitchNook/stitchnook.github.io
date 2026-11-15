@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { ArchiveRestore, ChevronDown, CircleHelp, Coffee, HardDriveDownload, LibraryBig, SquareDashed, Type, Download, FileText, FolderOpen, ImagePlus, Languages, Monitor, Moon, Plus, Printer, Settings, Sun, Upload } from 'lucide-react'
+import { ArchiveRestore, ChevronDown, CircleHelp, Heart, HardDriveDownload, LibraryBig, SquareDashed, Type, Download, FileText, FolderOpen, ImagePlus, Languages, Monitor, Moon, Plus, Printer, Settings, Sun, Upload } from 'lucide-react'
 import { CanvasToolbar, ToolOptionsBar, ToolRail } from './components/Toolbar'
 import { ColorFilterPanel } from './components/ColorFilterPanel'
 import { ColorPalette } from './components/ColorPalette'
@@ -51,6 +51,8 @@ import { isBrushTool } from './lib/brush'
 import { SHORTCUT_KEYS, isTextEntry, matches } from './lib/keys'
 import { LANG, LANGS, LANG_NAMES, setLang } from './i18n'
 import { KOFI_URL } from './lib/support'
+import { canPrompt, markShown, recordUsageDay, type SupportMoment } from './lib/supportPrompt'
+import { SupportCard } from './components/SupportCard'
 import { t } from './App.i18n'
 
 const WELCOME_KEY = 'stitchly.welcomeSeen.v1'
@@ -125,6 +127,18 @@ export default function App() {
     }
   }
   const mods = useModifiers()
+
+  // Tip suggestion after a moment where the app helped (see lib/supportPrompt).
+  const [supportMoment, setSupportMoment] = useState<SupportMoment | null>(null)
+  const suggestSupport = useCallback((moment: SupportMoment, delay = 0) => {
+    window.setTimeout(() => {
+      if (canPrompt(moment)) setSupportMoment((current) => current ?? moment)
+    }, delay)
+  }, [])
+  useEffect(() => {
+    recordUsageDay()
+    suggestSupport('loyal', 2 * 60 * 1000)
+  }, [suggestSupport])
 
   /* Reference layer: one per project, kept apart from the project data. */
   const [referenceState, setReferenceState] = useState(() => ({ id: '', reference: null as Reference | null }))
@@ -212,6 +226,15 @@ export default function App() {
   )
   const totalStitches = useMemo(() => counts.reduce((sum, n) => sum + n, 0), [counts])
   const doneStitches = useMemo(() => doneCounts.reduce((sum, n) => sum + n, 0), [doneCounts])
+
+  // Embroidery just finished (not a finished project being opened): suggest a tip.
+  const finishedRef = useRef<{ id: string; finished: boolean } | null>(null)
+  useEffect(() => {
+    const finished = totalStitches >= 100 && doneStitches === totalStitches
+    const previous = finishedRef.current
+    finishedRef.current = { id: project.id, finished }
+    if (finished && previous?.id === project.id && !previous.finished) suggestSupport('complete', 800)
+  }, [doneStitches, totalStitches, project.id, suggestSupport])
   const paletteCodes = useMemo(
     () => new Set(project.palette.map((thread) => thread.code)),
     [project.palette],
@@ -302,6 +325,7 @@ export default function App() {
     const created = { ...createProject(result), palette: result.palette, cells: result.cells }
     if (result.kind === 'motif') addCompleteMotif({ ...created, kind: 'motif', folderId: result.folderId })
     else openProject(created)
+    suggestSupport('import', 1500)
   }
 
   const pickThread = useCallback(
@@ -392,6 +416,19 @@ export default function App() {
   >(null)
   /** The « Créer » window, opened with a type and a source already chosen. */
   const [create, setCreate] = useState<CreatePreset | null>(null)
+
+  // The tip card waits until nothing else asks for attention; once seen, the next one is weeks away.
+  const supportVisible = supportMoment !== null && !welcome && help === null && dialog === 'none' && create === null
+  useEffect(() => {
+    if (supportVisible && supportMoment !== null) markShown(supportMoment)
+  }, [supportVisible, supportMoment])
+  // Right after printing (or saving the PDF) from the print view.
+  useEffect(() => {
+    if (!printing) return
+    const onAfterPrint = () => suggestSupport('print', 600)
+    window.addEventListener('afterprint', onAfterPrint)
+    return () => window.removeEventListener('afterprint', onAfterPrint)
+  }, [printing, suggestSupport])
   /** The library manager's start folder. */
   const [managerFolder, setManagerFolder] = useState<string | null>(null)
   const [restoring, setRestoring] = useState<{ backup: Backup; fileName: string } | null>(null)
@@ -841,17 +878,6 @@ export default function App() {
                 icon: item.icon,
                 onSelect: () => setThemeChoice(item.value),
               })),
-              // Changing the language reloads the page: save the pending edits first.
-              { heading: t.language },
-              ...LANGS.map((lang) => ({
-                label: `${LANG_NAMES[lang]}${lang === LANG ? '  ✓' : ''}`,
-                icon: <Languages size={13} />,
-                onSelect: () => {
-                  if (lang === LANG) return
-                  save.flush()
-                  setLang(lang)
-                },
-              })),
             ]}
             trigger={(toggle) => (
               <Button
@@ -865,17 +891,36 @@ export default function App() {
               </Button>
             )}
           />
+          <Menu
+            alignRight
+            width={150}
+            items={LANGS.map((lang) => ({
+              label: `${LANG_NAMES[lang]}${lang === LANG ? '  ✓' : ''}`,
+              // Changing the language reloads the page: save the pending edits first.
+              onSelect: () => {
+                if (lang === LANG) return
+                save.flush()
+                setLang(lang)
+              },
+            }))}
+            trigger={(toggle) => (
+              <Button size="sm" variant="ghost" onClick={toggle} title={t.languageTitle} aria-label={t.language}>
+                <Languages size={14} /> {LANG.toUpperCase()}
+              </Button>
+            )}
+          />
           <Button size="sm" variant="ghost" onClick={() => setHelp('start')} title={t.helpTitle}>
             <CircleHelp size={14} /> {t.help}
           </Button>
+          <span className="mx-1.5 h-5 w-px bg-panel-line" />
           <a
             href={KOFI_URL}
             target="_blank"
             rel="noopener"
             title={t.supportTitle}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-slate-400 hover:bg-panel-soft hover:text-slate-200"
+            className="flex items-center gap-1.5 rounded-full border border-rose-500/50 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400 hover:bg-rose-500/20"
           >
-            <Coffee size={14} /> {t.support}
+            <Heart size={13} className="fill-rose-500 text-rose-500" /> {t.support}
           </a>
         </div>
       </header>
@@ -1170,6 +1215,7 @@ export default function App() {
             setCreate(null)
             if (imported.kind === 'motif') addCompleteMotif(imported)
             else openProject(imported, 'tab')
+            suggestSupport('import', 1500)
           }}
           onJson={(file, kind, folderId) => {
             importProjectFile(file)
@@ -1350,6 +1396,10 @@ export default function App() {
             </Button>
           </div>
         </div>
+      ) : null}
+
+      {supportVisible && supportMoment !== null ? (
+        <SupportCard moment={supportMoment} onClose={() => setSupportMoment(null)} />
       ) : null}
 
       {printing ? (
